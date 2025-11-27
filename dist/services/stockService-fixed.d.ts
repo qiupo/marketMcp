@@ -1,9 +1,9 @@
 import { StockQueryParams, StockQueryResult, DataSource } from '../types/stock.js';
 /**
- * 股票服务管理器
- * 使用IPO3.com作为主要数据源
+ * 股票服务管理器 - 修复版本
+ * 使用IPO3.com作为主要数据源，避免JSDOM兼容性问题
  */
-export declare class StockService {
+export declare class StockServiceFixed {
     private ipo3Service;
     /**
      * 获取股票信息
@@ -73,7 +73,24 @@ export declare class StockService {
     /**
      * 获取公告列表
      */
-    getStockNoticeList(stockCode: string, page?: number): Promise<import("../types/stock.js").PaginatedResponse<import("../types/stock.js").NoticeInfo>>;
+    getStockNoticeList(stockCode: string, page?: number): Promise<{
+        success: boolean;
+        data: any;
+        pagination: {
+            total: any;
+            currentPage: number;
+            nextPage: number;
+            hasNextPage: boolean;
+        };
+        source: DataSource;
+        errors?: undefined;
+    } | {
+        success: boolean;
+        data: any[];
+        errors: string[];
+        source: DataSource;
+        pagination?: undefined;
+    }>;
     /**
      * 获取定增计划
      */
@@ -90,4 +107,31 @@ export declare class StockService {
      * 获取研报列表
      */
     getStockReportList(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").ReportInfo[]>;
+    /**
+     * 获取演示用的股票数据（不需要网络请求）
+     */
+    getDemoStockInfo(codes: string[]): StockQueryResult;
+    /**
+     * 获取演示用的公司信息
+     */
+    getDemoCompanyInfo(stockCode: string): {
+        success: boolean;
+        data: {
+            stockCode: string;
+            stockName: string;
+            englishName: string;
+            listingDate: string;
+            registeredCapital: number;
+            businessScope: string;
+            address: string;
+            website: string;
+            phone: string;
+            totalShares: number;
+            circulatingShares: number;
+            chairman: string;
+            generalManager: string;
+            secretary: string;
+        };
+        source: string;
+    };
 }

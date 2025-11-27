@@ -1,4 +1,4 @@
-import { IPO3Service } from './ipo3-service.js';
+import { IPO3ServiceV2 } from './ipo3-service-v2.js';
 import { StockInfo, StockQueryParams, StockQueryResult, DataSource } from '../types/stock.js';
 
 /**
@@ -6,7 +6,7 @@ import { StockInfo, StockQueryParams, StockQueryResult, DataSource } from '../ty
  * 使用IPO3.com作为主要数据源
  */
 export class StockService {
-  private ipo3Service = new IPO3Service();
+  private ipo3Service = new IPO3ServiceV2();
 
   /**
    * 获取股票信息
@@ -92,7 +92,18 @@ export class StockService {
    * 获取热门股票
    */
   async getPopularStocks(): Promise<StockQueryResult> {
-    return this.ipo3Service.getPopularStocks();
+    try {
+      // 使用搜索功能获取热门股票示例
+      const result = await this.ipo3Service.searchStock('热门');
+      if (!result.success || result.data.length === 0) {
+        // 如果搜索无结果，返回一些示例代码
+        return await this.ipo3Service.getStockInfo(['430002', '430003', '430004', '430005', '430006']);
+      }
+      return result;
+    } catch (error) {
+      // 降级处理：返回一些常见的新三板股票代码
+      return await this.ipo3Service.getStockInfo(['430002', '430003', '430004', '430005', '430006']);
+    }
   }
 
   /**
@@ -109,5 +120,98 @@ export class StockService {
   normalizeStockCode(code: string): string {
     // 去除市场前缀，只保留6位数字
     return code.replace(/^(sh|sz|bj)/i, '');
+  }
+
+  // ==================== IPO3 增强功能 ====================
+
+  /**
+   * 获取公司详细信息
+   */
+  async getCompanyInfo(stockCode: string, englishKey: boolean = false) {
+    return await this.ipo3Service.getCompanyInfo(stockCode, englishKey);
+  }
+
+  /**
+   * 获取利润表数据
+   */
+  async getIncomeStatementList(stockCode: string, dateType: string = '年报', englishKey: boolean = false) {
+    return await this.ipo3Service.getIncomeStatementList(stockCode, dateType, englishKey);
+  }
+
+  /**
+   * 获取资产负债表数据
+   */
+  async getBalanceSheetList(stockCode: string, dateType: string = '年报', englishKey: boolean = false) {
+    return await this.ipo3Service.getBalanceSheetList(stockCode, dateType, englishKey);
+  }
+
+  /**
+   * 获取现金流量表数据
+   */
+  async getCashFlowStatementList(stockCode: string, dateType: string = '年报', englishKey: boolean = false) {
+    return await this.ipo3Service.getCashFlowStatementList(stockCode, dateType, englishKey);
+  }
+
+  /**
+   * 获取财务分析数据
+   */
+  async getFinancialAnalysisList(stockCode: string, dateType: string = '年报', englishKey: boolean = false) {
+    return await this.ipo3Service.getFinancialAnalysisList(stockCode, dateType, englishKey);
+  }
+
+  /**
+   * 获取募资明细
+   */
+  async getStockFundList(stockCode: string, englishKey: boolean = false) {
+    return await this.ipo3Service.getStockFundList(stockCode, englishKey);
+  }
+
+  /**
+   * 获取交易明细
+   */
+  async getStockTradeList(stockCode: string, englishKey: boolean = false) {
+    return await this.ipo3Service.getStockTradeList(stockCode, englishKey);
+  }
+
+  /**
+   * 获取事件提醒
+   */
+  async getStockEventList(stockCode: string, englishKey: boolean = false) {
+    return await this.ipo3Service.getStockEventList(stockCode, englishKey);
+  }
+
+  /**
+   * 获取公告列表
+   */
+  async getStockNoticeList(stockCode: string, page: number = 1) {
+    return await this.ipo3Service.getStockNoticeList(stockCode, page);
+  }
+
+  /**
+   * 获取定增计划
+   */
+  async getStockSurvey(stockCode: string, englishKey: boolean = false) {
+    return await this.ipo3Service.getStockSurvey(stockCode, englishKey);
+  }
+
+  /**
+   * 获取做市商信息
+   */
+  async getStockBrokerList(stockCode: string, englishKey: boolean = false) {
+    return await this.ipo3Service.getStockBrokerList(stockCode, englishKey);
+  }
+
+  /**
+   * 获取质押信息
+   */
+  async getStockPledgeData(stockCode: string, englishKey: boolean = false) {
+    return await this.ipo3Service.getStockPledgeData(stockCode, englishKey);
+  }
+
+  /**
+   * 获取研报列表
+   */
+  async getStockReportList(stockCode: string, englishKey: boolean = false) {
+    return await this.ipo3Service.getStockReportList(stockCode, englishKey);
   }
 }

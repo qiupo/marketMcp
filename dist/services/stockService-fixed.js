@@ -1,11 +1,11 @@
-import { IPO3ServiceV2 } from './ipo3-service-v2.js';
+import { IPO3ServiceRegex } from './ipo3-service-regex.js';
 import { DataSource } from '../types/stock.js';
 /**
- * 股票服务管理器
- * 使用IPO3.com作为主要数据源
+ * 股票服务管理器 - 修复版本
+ * 使用IPO3.com作为主要数据源，避免JSDOM兼容性问题
  */
-export class StockService {
-    ipo3Service = new IPO3ServiceV2();
+export class StockServiceFixed {
+    ipo3Service = new IPO3ServiceRegex();
     /**
      * 获取股票信息
      * @param params 查询参数
@@ -187,5 +187,53 @@ export class StockService {
      */
     async getStockReportList(stockCode, englishKey = false) {
         return await this.ipo3Service.getStockReportList(stockCode, englishKey);
+    }
+    // ==================== 演示数据方法（用于测试）====================
+    /**
+     * 获取演示用的股票数据（不需要网络请求）
+     */
+    getDemoStockInfo(codes) {
+        const demoData = codes.map((code, index) => ({
+            code,
+            name: `演示股票${code}`,
+            price: 10 + Math.random() * 20,
+            change: (Math.random() - 0.5) * 2,
+            changePercent: `${((Math.random() - 0.5) * 10).toFixed(2)}%`,
+            volume: Math.floor(Math.random() * 1000000),
+            amount: Math.floor(Math.random() * 10000000),
+            market: index % 2 === 0 ? 'NSE' : 'SZSE',
+            updateTime: new Date().toISOString()
+        }));
+        return {
+            success: true,
+            data: demoData,
+            source: 'IPO3 (演示模式)',
+            errors: undefined
+        };
+    }
+    /**
+     * 获取演示用的公司信息
+     */
+    getDemoCompanyInfo(stockCode) {
+        return {
+            success: true,
+            data: {
+                stockCode,
+                stockName: `演示公司${stockCode}`,
+                englishName: `Demo Company ${stockCode}`,
+                listingDate: '2015-06-18',
+                registeredCapital: 5000,
+                businessScope: '技术开发、技术服务、技术咨询',
+                address: '北京市海淀区',
+                website: `www.demo-${stockCode}.com`,
+                phone: '010-12345678',
+                totalShares: 50000000,
+                circulatingShares: 30000000,
+                chairman: '张三',
+                generalManager: '李四',
+                secretary: '王五'
+            },
+            source: 'IPO3 (演示模式)'
+        };
     }
 }

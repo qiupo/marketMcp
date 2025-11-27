@@ -105,6 +105,170 @@ export interface GetStockInfoParams {
     market?: string;
     data_source?: string;
 }
+export interface FinancialData {
+    [key: string]: string | number;
+}
+export interface IncomeStatement extends FinancialData {
+    reportDate?: string;
+    totalSalesRevenue?: string;
+    salesRevenue?: string;
+    totalSalesCost?: string;
+    salesCost?: string;
+    additionalTax?: string;
+    sellingExpenses?: string;
+    managementExpenses?: string;
+    financialExpenses?: string;
+    salesProfit?: string;
+    totalProfit?: string;
+    netProfit?: string;
+    publishDate?: string;
+}
+export interface BalanceSheet extends FinancialData {
+    reportDate?: string;
+    cashAndBank?: string;
+    notesReceivable?: string;
+    accountsReceivable?: string;
+    inventory?: string;
+    totalCurrentAssets?: string;
+    fixedAsset?: string;
+    intangibleAsset?: string;
+    totalAssets?: string;
+    totalCurrentLiabilities?: string;
+    totalLiabilities?: string;
+    totalEquity?: string;
+    publishDate?: string;
+}
+export interface CashFlowStatement extends FinancialData {
+    reportDate?: string;
+    cashFromGoodsAndServices?: string;
+    netCashFromOperatingActivities?: string;
+    netCashFromInvestingActivities?: string;
+    netIncreaseInCash?: string;
+    openingBalance?: string;
+    closingBalance?: string;
+    netProfit?: string;
+    publishDate?: string;
+}
+export interface FinancialAnalysis extends FinancialData {
+    reportDate?: string;
+    earningsPerShareOfBase?: string;
+    netAssetValuePerShare?: string;
+    returnOnEquityDiluted?: string;
+    totalAssetReturnRate?: string;
+    salesNetProfitMargin?: string;
+    salesGrossProfitMargin?: string;
+    assetLiabilityRatio?: string;
+    currentRatio?: string;
+    quickRatio?: string;
+    inventoryTurnover?: string;
+    totalAssetTurnoverRate?: string;
+}
+export interface FundInfo {
+    fundDate: string;
+    fundType: string;
+    fundMoney?: string;
+    additionalIssuanceQuantity?: string;
+    additionalIssuancePrice?: string;
+    investorList: InvestorInfo[];
+}
+export interface InvestorInfo {
+    investor: string;
+    investorType: string;
+    isCompanyExecutive: string;
+    numberOfSharesHeld: string;
+    investmentAmount: string;
+    lockedState: string;
+}
+export interface TradeInfo {
+    tradeDate: string;
+    totalTradeAmount: string;
+    tradePrice: string;
+    tradeQuantity: string;
+    buyerName: string;
+    buyerBroker: string;
+    sellerName: string;
+    sellerBroker: string;
+}
+export interface EventInfo {
+    eventDate: string;
+    eventType: string;
+    title: string;
+}
+export interface NoticeInfo {
+    id: string;
+    title: string;
+    downUrl: string;
+    originalFileUrl: string;
+    time: string;
+    detailUrl: string;
+}
+export interface SurveyInfo {
+    financingProgress: string;
+    financingMoney: string;
+    transferOfShares: string;
+    pricePerShare: string;
+    latestAnnouncementDate: string;
+    planAnnouncementDate: string;
+    companySecretary: string;
+    companySecretaryPhone: string;
+    companySecretaryEmail: string;
+    industry: string;
+    broker: string;
+    additionalIssuanceTarget: string;
+    purposeOfIssuance: string;
+}
+export interface BrokerInfo {
+    broker: string;
+    initialStock: string;
+    initialPrice: string;
+}
+export interface PledgeData {
+    pledgeTotal: string;
+    pledgeShareholders: Array<{
+        name: string;
+        value: number;
+    }>;
+    pledgePledgee: Array<{
+        name: string;
+        value: number;
+    }>;
+}
+export interface PledgeLoanRecord {
+    shareholderName: string;
+    pledgeDate: string;
+    loanAmount: string;
+    pledgee: string;
+    pledgeToTotalRatio: string;
+    pledgeToEquityRatio: string;
+    pledgeRate: string;
+    pledgedShares: string;
+    pledgeStartDate: string;
+    pledgeEndDate: string;
+    pledgeDescription: string;
+}
+export interface ReportInfo {
+    title: string;
+    detailUrl: string;
+    publishDate: string;
+}
+export interface APIResponse<T> {
+    success: boolean;
+    data: T;
+    errors?: string[];
+    source: DataSource;
+}
+export interface PaginatedResponse<T> {
+    success: boolean;
+    data: T[];
+    pagination?: {
+        total: number;
+        currentPage: number;
+        nextPage?: number;
+        hasNextPage: boolean;
+    };
+    errors?: string[];
+    source: DataSource;
+}
 export interface StockQueryResult {
     success: boolean;
     data: StockInfo[];

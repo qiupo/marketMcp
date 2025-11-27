@@ -125,6 +125,204 @@ export interface GetStockInfoParams {
   data_source?: string;      // 数据源选择
 }
 
+// 财务数据接口
+export interface FinancialData {
+  [key: string]: string | number;
+}
+
+// 利润表数据
+export interface IncomeStatement extends FinancialData {
+  reportDate?: string;           // 报告期
+  totalSalesRevenue?: string;    // 营业总收入
+  salesRevenue?: string;         // 营业收入
+  totalSalesCost?: string;       // 营业总成本
+  salesCost?: string;            // 营业成本
+  additionalTax?: string;        // 营业税金及附加
+  sellingExpenses?: string;      // 销售费用
+  managementExpenses?: string;  // 管理费用
+  financialExpenses?: string;    // 财务费用
+  salesProfit?: string;          // 营业利润
+  totalProfit?: string;          // 利润总额
+  netProfit?: string;             // 净利润
+  publishDate?: string;          // 公告日期
+}
+
+// 资产负债表数据
+export interface BalanceSheet extends FinancialData {
+  reportDate?: string;           // 报告期
+  cashAndBank?: string;           // 货币资金
+  notesReceivable?: string;      // 应收票据
+  accountsReceivable?: string;   // 应收账款
+  inventory?: string;            // 存货
+  totalCurrentAssets?: string;   // 流动资产合计
+  fixedAsset?: string;           // 固定资产
+  intangibleAsset?: string;      // 无形资产
+  totalAssets?: string;          // 资产总计
+  totalCurrentLiabilities?: string; // 流动负债合计
+  totalLiabilities?: string;     // 负债合计
+  totalEquity?: string;          // 股东权益合计
+  publishDate?: string;          // 公告日期
+}
+
+// 现金流量表数据
+export interface CashFlowStatement extends FinancialData {
+  reportDate?: string;           // 报告期
+  cashFromGoodsAndServices?: string; // 销售商品、提供劳务收到的现金
+  netCashFromOperatingActivities?: string; // 经营活动产生的现金流量净额
+  netCashFromInvestingActivities?: string; // 投资活动产生的现金流量净额
+  netIncreaseInCash?: string;   // 现金及现金等价物净增加额
+  openingBalance?: string;       // 期初现金及现金等价物余额
+  closingBalance?: string;       // 期末现金及现金等价物余额
+  netProfit?: string;             // 净利润
+  publishDate?: string;          // 公告日期
+}
+
+// 财务分析数据
+export interface FinancialAnalysis extends FinancialData {
+  reportDate?: string;           // 报告期
+  earningsPerShareOfBase?: string; // 每股收益-基本
+  netAssetValuePerShare?: string; // 每股净资产
+  returnOnEquityDiluted?: string; // 净资产收益率-摊薄
+  totalAssetReturnRate?: string;  // 总资产报酬率
+  salesNetProfitMargin?: string;  // 销售净利率
+  salesGrossProfitMargin?: string; // 销售毛利率
+  assetLiabilityRatio?: string;   // 资产负债率
+  currentRatio?: string;          // 流动比率
+  quickRatio?: string;            // 速动比率
+  inventoryTurnover?: string;     // 存货周转率
+  totalAssetTurnoverRate?: string; // 总资产周转率
+}
+
+// 募资信息
+export interface FundInfo {
+  fundDate: string;               // 募资日期
+  fundType: string;               // 募资类型
+  fundMoney?: string;             // 募集资金
+  additionalIssuanceQuantity?: string; // 增发数量
+  additionalIssuancePrice?: string; // 增发价格
+  investorList: InvestorInfo[];  // 投资人列表
+}
+
+// 投资者信息
+export interface InvestorInfo {
+  investor: string;              // 投资者
+  investorType: string;           // 类型
+  isCompanyExecutive: string;     // 是否为公司高管
+  numberOfSharesHeld: string;    // 持股数
+  investmentAmount: string;       // 投资额（元）
+  lockedState: string;            // 锁定状态
+}
+
+// 交易明细
+export interface TradeInfo {
+  tradeDate: string;              // 交易日期
+  totalTradeAmount: string;       // 总成交额（元）
+  tradePrice: string;             // 成交价格（元）
+  tradeQuantity: string;          // 成交数量（股）
+  buyerName: string;              // 买方账号名称
+  buyerBroker: string;            // 买方主办券商
+  sellerName: string;             // 卖方账号名称
+  sellerBroker: string;           // 卖方主办券商
+}
+
+// 事件信息
+export interface EventInfo {
+  eventDate: string;              // 事件日期
+  eventType: string;             // 事件类型
+  title: string;                  // 事件标题
+}
+
+// 公告信息
+export interface NoticeInfo {
+  id: string;                     // 数据id
+  title: string;                  // 公告标题
+  downUrl: string;                // 公告文件
+  originalFileUrl: string;        // 公告原始文件
+  time: string;                   // 发布日期
+  detailUrl: string;              // 公告详情
+}
+
+// 定增计划
+export interface SurveyInfo {
+  financingProgress: string;       // 融资进度
+  financingMoney: string;         // 融资金额
+  transferOfShares: string;        // 出让股份
+  pricePerShare: string;           // 每股价格
+  latestAnnouncementDate: string; // 最新公告日
+  planAnnouncementDate: string;    // 预案公告日
+  companySecretary: string;       // 董秘
+  companySecretaryPhone: string;  // 董秘电话
+  companySecretaryEmail: string;  // 董秘邮箱
+  industry: string;               // 行业分类
+  broker: string;                 // 主办券商
+  additionalIssuanceTarget: string; // 增发对象
+  purposeOfIssuance: string;      // 增发目的
+}
+
+// 做市商信息
+export interface BrokerInfo {
+  broker: string;                 // 做市商
+  initialStock: string;            // 初始库存
+  initialPrice: string;            // 初始价格
+}
+
+// 质押信息
+export interface PledgeData {
+  pledgeTotal: string;             // 累计质押
+  pledgeShareholders: Array<{
+    name: string;
+    value: number;
+  }>;
+  pledgePledgee: Array<{
+    name: string;
+    value: number;
+  }>;
+}
+
+// 质押贷款记录
+export interface PledgeLoanRecord {
+  shareholderName: string;        // 股东名称
+  pledgeDate: string;              // 质押日期
+  loanAmount: string;              // 贷款金额
+  pledgee: string;                 // 质权人
+  pledgeToTotalRatio: string;      // 质押占总股比
+  pledgeToEquityRatio: string;     // 质押占所持股比
+  pledgeRate: string;              // 质押率
+  pledgedShares: string;           // 质押股数
+  pledgeStartDate: string;         // 质押起初日
+  pledgeEndDate: string;          // 质押截止日
+  pledgeDescription: string;       // 质押说明
+}
+
+// 研报信息
+export interface ReportInfo {
+  title: string;                   // 研报标题
+  detailUrl: string;               // 详情地址
+  publishDate: string;             // 发布日期
+}
+
+// API响应格式
+export interface APIResponse<T> {
+  success: boolean;
+  data: T;
+  errors?: string[];
+  source: DataSource;
+}
+
+// 分页响应
+export interface PaginatedResponse<T> {
+  success: boolean;
+  data: T[];
+  pagination?: {
+    total: number;
+    currentPage: number;
+    nextPage?: number;
+    hasNextPage: boolean;
+  };
+  errors?: string[];
+  source: DataSource;
+}
+
 // 批量查询结果
 export interface StockQueryResult {
   success: boolean;

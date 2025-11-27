@@ -1,10 +1,14 @@
 /**
  * HTML解析工具类
- * 使用Cheerio提供CSS选择器解析功能
+ * 使用正则表达式解析HTML内容，提供轻量级解析能力
  */
 export declare class HtmlParser {
-    $: any;
+    private html;
     constructor(html: string);
+    /**
+     * 简单的CSS选择器解析器
+     */
+    private $;
     /**
      * 提取文本内容
      */

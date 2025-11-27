@@ -1,0 +1,352 @@
+/**
+ * IPO3.com 字段映射配置
+ * 基于config.py中的映射关系
+ */
+
+// 公司信息字段映射
+export const COMPANY_INFO_KEY_MAP = {
+  '股票名称': 'stockName',
+  '股票代码': 'stockCode',
+  '最新价': 'lastPrice',
+  '涨跌额': 'changeValue',
+  '涨跌幅': 'changeRate',
+  '所属行业': 'industry',
+  '今开': 'openPrice',
+  '最高': 'highPrice',
+  '平均价': 'averagePrice',
+  '市盈率': 'peRatio',
+  '成交量': 'volume',
+  '总市值': 'totalMarketValue',
+  '昨收': 'prevClosePrice',
+  '最低': 'lowPrice',
+  '换手率': 'turnoverRate',
+  '市净率': 'pbRatio',
+  '成交额': 'turnover',
+  '流通市值': 'circularMarketValue',
+  '公司名称': 'companyName',
+  '公司网址': 'companyWebsite',
+  '公司电话': 'companyPhone',
+  '董秘': 'companySecretary',
+  '董秘Email': 'companySecretaryEmail',
+  '董秘电话': 'companySecretaryPhone',
+  '法人': 'legalRepresentative',
+  '主办券商': 'broker',
+  '交易方式': 'transactionMethod',
+  '挂牌日期': 'listingDate',
+  '成立日期': 'establishDate',
+  '做市日期': 'makingDate',
+  '注册资本': 'registeredCapital',
+  '所属地区': 'area',
+  '办公地址': 'companyAddress',
+  '公司简介': 'companyIntroduction',
+  '主营业务': 'mainBusiness',
+  '经营范围': 'businessScope',
+  '融资状态': 'financingStatus',
+  '实际募资净额': 'financingActualNetAmount',
+  '融资成功率': 'financingSuccessRate',
+  '融资排名': 'financingRanking'
+} as const;
+
+// 利润表字段映射
+export const INCOME_STATEMENT_KEY_MAP = {
+  '利润表': 'incomeStatement',
+  '报告期': 'reportDate',
+  '营业总收入': 'totalSalesRevenue',
+  '营业收入': 'salesRevenue',
+  '营业总成本': 'totalSalesCost',
+  '营业成本': 'salesCost',
+  '营业税金及附加': 'additionalTax',
+  '销售费用': 'sellingExpenses',
+  '管理费用': 'managementExpenses',
+  '财务费用': 'financialExpenses',
+  '资产减值损失': 'assetImpairmentLoss',
+  '加:投资收益': 'investmentIncome',
+  '其中:对联营企业和合营企业的投资收益': 'investmentIncomeFromAssociatesAndJointVentures',
+  '营业利润': 'salesProfit',
+  '加:营业外收入': 'nonOperatingIncome',
+  '减:营业外支出': 'nonOperatingExpenses',
+  '其中:非流动资产处置净损失': 'netLossFromDisposalOfNonCurrentAssets',
+  '利润总额': 'totalProfit',
+  '减:所得税费用': 'incomeTaxExpenses',
+  '净利润': 'netProfit',
+  '归属于母公司股东的净利润': 'netProfitAttributableToShareholdersOfTheParentCompany',
+  '综合收益总额': 'totalComprehensiveIncome',
+  '归属于母公司所有者的综合收益总额': 'totalComprehensiveIncomeAttributableToTheOwnersOfTheParentCompany',
+  '基本每股收益': 'basicEarningsPerShare',
+  '公告日期': 'publishDate'
+} as const;
+
+// 资产负债表字段映射
+export const BALANCE_SHEET_KEY_MAP = {
+  '资产负债表': 'balanceSheet',
+  '报告期': 'reportDate',
+  '货币资金': 'cashAndBank',
+  '应收票据': 'notesReceivable',
+  '应收账款': 'accountsReceivable',
+  '预付款项': 'advancePayment',
+  '其他应收款': 'otherReceivable',
+  '存货': 'inventory',
+  '其他流动资产': 'otherCurrentAssets',
+  '流动资产合计': 'totalCurrentAssets',
+  '可供出售金融资产': 'financialAssetsAvailableForSale',
+  '长期股权投资': 'longTermEquityInvestments',
+  '投资性房地产': 'investmentRealEstate',
+  '固定资产': 'fixedAsset',
+  '无形资产': 'intangibleAsset',
+  '长期待摊费用': 'longTermDeferredExpenses',
+  '递延所得税资产': 'deferredIncomeTaxAsset',
+  '非流动资产合计': 'nonCurrentAsset',
+  '资产总计': 'totalAssets',
+  '应付票据': 'notesPayable',
+  '应付账款': 'accountsPayable',
+  '预收款项': 'depositReceived',
+  '应付职工薪酬': 'salaryPayable',
+  '应交税费': 'taxPayable',
+  '应付股利': 'dividendPayable',
+  '其他应付款': 'otherPayable',
+  '流动负债合计': 'totalCurrentLiabilities',
+  '其他非流动负债': 'otherNonCurrentLiabilities',
+  '非流动负债合计': 'totalNonCurrentLiabilities',
+  '负债合计': 'totalLiabilities',
+  '实收资本(或股本)': 'paidInCapital',
+  '资本公积': 'capitalReserve',
+  '盈余公积': 'earnedSurplus',
+  '未分配利润': 'undistributedProfit',
+  '外币报表折算差额': 'translationDifferenceOfForeignCurrencyStatements',
+  '归属于母公司股东权益合计': 'totalEquityAttributableToShareholdersOfTheParentCompany',
+  '股东权益合计': 'totalEquity',
+  '负债和股东权益合计': 'totalLiabilitiesAndShareholderEquity',
+  '公告日期': 'publishDate'
+} as const;
+
+// 现金流量表字段映射
+export const CASH_FLOW_STATEMENT_KEY_MAP = {
+  '现金流量表': 'cashFlowStatement',
+  '报告期': 'reportDate',
+  '销售商品、提供劳务收到的现金': 'cashReceivedFromGoodsAndServices',
+  '收到的税费返还': 'refundsOfTaxes',
+  '收到其他与经营活动有关的现金': 'otherCashReceiptsRelatingToOperatingActivities',
+  '经营活动现金流入小计': 'subTotalOfCashInflowsFromOperatingActivities',
+  '购买商品、接受劳务支付的现金': 'cashPaidForGoodsAndServices',
+  '支付给职工以及为职工支付的现金': 'cashPaidToAndOnBehalfOfEmployees',
+  '支付的各项税费': 'paymentsOfAllTypesOfTaxes',
+  '支付其他与经营活动有关的现金': 'otherCashPaymentsRelatingToOperatingActivities',
+  '经营活动现金流出小计': 'subTotalOfCashOutflowsToOperatingActivities',
+  '经营活动产生的现金流量净额': 'netCashFlowsFromOperatingActivities',
+  '收回投资收到的现金': 'cashReceivedFromReturnOfInvestment',
+  '取得投资收益收到的现金': 'cashReceivedFromReturnOnInvestment',
+  '处置固定资产、无形资产和其他长期资产收回的现金净额': 'netCashReceivedFromTheSaleOfFixedAssetsIntangibleAssetsAndOtherLongTermAssets',
+  '处置子公司及其他营业单位收到的现金净额': 'netCashReceivedFromDisposalOfSubsidiariesAndOtherOperatingUnits',
+  '收到其他与投资活动有关的现金': 'otherCashReceiptsRelatingToInvestingActivities',
+  '投资活动现金流入小计': 'subTotalOfCashInflowsFromInvestingActivities',
+  '购建固定资产、无形资产和其他长期资产支付的现金': 'cashPaidToAcquireFixedAssetsIntangibleAssetsAndOtherLongTermAssets',
+  '投资活动现金流出小计': 'subTotalOfCashOutflowsToInvestingActivities',
+  '投资活动产生的现金流量净额': 'netCashFlowsFromInvestingActivities',
+  '筹资活动现金流入小计': 'subTotalOfCashInflowsFromFinancingActivities',
+  '筹资活动现金流出小计': 'subTotalOfCashOutflowsToFinancingActivities',
+  '汇率变动对现金的影响': 'effectOfChangesInForeignExchangeRateOnCash',
+  '现金及现金等价物净增加额': 'netIncreaseInCashAndCashEquivalents',
+  '期初现金及现金等价物余额': 'openingBalanceOfCashAndCashEquivalents',
+  '期末现金及现金等价物余额': 'closingBalanceOfCashAndCashEquivalents',
+  '净利润': 'netProfit',
+  '加: 资产减值准备': 'assetImpairmentProvision',
+  '固定资产折旧、油气资产折耗、生产性生物资产折旧': 'depreciationOfFixedAssetsDepletionOfOilAndGasAssetsAndDepreciationOfProductiveBiologicalAssets',
+  '无形资产摊销': 'amortizationOfIntangibleAssets',
+  '长期待摊费用摊销': 'amortizationOfLongTermPrepayment',
+  '处置固定资产、无形资产和其他长期资产的损失': 'lossesOnDisposalOfFixedAssetsIntangibleAssetsAndOtherLongTermAssets',
+  '财务费用': 'financialExpenses',
+  '投资损失': 'investmentLoss',
+  '递延所得税资产减少': 'decreaseInDeferredIncomeTaxAssets',
+  '存货的减少': 'decreaseInInventories',
+  '经营性应收项目的减少': 'decreaseInOperatingPayables',
+  '经营性应付项目的增加': 'increaseInOperatingPayables',
+  '其他': 'other',
+  '现金的期末余额': 'cashAtEndOfPeriod',
+  '减:现金的期初余额': 'cashAtBeginningOfPeriod',
+  '公告日期': 'publishDate'
+} as const;
+
+// 财务分析字段映射
+export const FINANCIAL_ANALYSIS_KEY_MAP = {
+  '财务分析': 'financialAnalysis',
+  '报告期': 'reportDate',
+  '每股收益-基本(元)': 'earningsPerShareOfBase',
+  '每股收益-稀释(元)': 'earningsPerShareOfDilute',
+  '每股收益-扣除/基本(元)': 'earningsPerShareOfDeductionDivisionBase',
+  '每股收益-扣除/稀释(元)': 'earningsPerShareOfDeductionDivisionDilute',
+  '每股净资产(元)': 'netAssetValuePerShare',
+  '每股经营活动产生的现金流量净额(元)': 'netCashFlowGeneratedFromOperatingActivitiesPerShare',
+  '每股收益-期末股本摊薄(元)': 'earningsPerShareOfDilutedShareCapitalAtTheEndOfThePeriod',
+  '每股营业总收入(元)': 'totalOperatingIncomePerShare',
+  '每股营业收入(元)': 'operatingIncomePerShare',
+  '每股息税前利润(元)': 'preTaxProfitPerDividend',
+  '每股资本公积(元)': 'capitalReservePerShare',
+  '每股盈余公积(元)': 'surplusReservesPerShare',
+  '每股未分配利润(元)': 'undistributedProfitPerShare',
+  '每股留存收益(元)': 'retainedEarningsPerShare',
+  '每股现金流量净额(元)': 'netCashFlowPerShare',
+  '每股企业自由现金流量(元)': 'freeCashFlowPerShareOfEnterprise',
+  '每股股东自由现金流量(元)': 'freeCashFlowPerShareOfShareholder',
+  '净资产收益率-摊薄(%)': 'returnOnEquityDiluted',
+  '净资产收益率-加权(%)': 'returnOnEquityWeighted',
+  '净资产收益率-扣除/摊薄(%)': 'returnOnEquityDeductionDivisionDilution',
+  '净资产收益率-扣除/加权(%)': 'returnOnEquityDeductionDivisionWeighted',
+  '净资产收益率-年化(%)': 'returnOnEquityAnnualized',
+  '总资产报酬率(%)': 'totalAssetReturnRate',
+  '总资产报酬率-年化(%)': 'totalAssetReturnRateAnnualized',
+  '总资产净利率(%)': 'netProfitMarginOfTotalAssets',
+  '总资产净利率-年化(%)': 'netProfitMarginOfTotalAssetsAnnualized',
+  '投入资本回报率(%)': 'returnOnInvestmentCapital',
+  '销售净利率(%)': 'salesNetProfitMargin',
+  '销售毛利率(%)': 'salesGrossProfitMargin',
+  '销售成本率(%)': 'salesCostRate',
+  '销售期间费用率(%)': 'salesPeriodExpenseRate',
+  '净利润/营业总收入(%)': 'netProfitTotalDivisionOperatingIncome',
+  '营业利润/营业总收入(%)': 'operatingProfitDivisionTotalOperatingIncome',
+  '营业总成本/营业总收入(%)': 'totalOperatingCostDivisionTotalOperatingIncome',
+  '营业费用/营业总收入(%)': 'operatingExpensesDivisionTotalOperatingIncome',
+  '管理费用/营业总收入(%)': 'managementExpensesDivisionTotalOperatingIncome',
+  '财务费用/营业总收入(%)': 'financialExpensesDivisionTotalOperatingIncome',
+  '资产减值损失/营业总收入(%)': 'assetImpairmentLossDivisionTotalOperatingIncome',
+  '经营活动净收益/利润总额(%)': 'netIncomeFromOperatingActivitiesDivisionTotalProfit',
+  '价值变动净收益/利润总额(%)': 'valueChangeNetIncomeDivisionTotalProfit',
+  '营业外支出净额/利润总额(%)': 'netNonOperatingExpensesDivisionTotalProfit',
+  '所得税/利润总额(%)': 'incomeTaxDivisionTotalProfit',
+  '扣除非经常性损益的净利润/净利润(%)': 'netProfitAfterDeductingNonRecurringGainsAndLossesDivisionNetProfit',
+  '资产负债率(%)': 'assetLiabilityRatio',
+  '权益乘数(%)': 'equityMultiplier',
+  '流动资产/总资产(%)': 'currentAssetsDivisionTotalAssets',
+  '非流动资产/总资产(%)': 'nonCurrentAssetsDivisionTotalAssets',
+  '有形资产/总资产(%)': 'tangibleAssetsDivisionTotalAssets',
+  '归属母公司股东的权益/全部投入资本(%)': 'equityAttributableToShareholdersOfTheParentCompanyDivisionTotalInvestedCapital',
+  '带息负债/全部投入资本(%)': 'interestBearingLiabilitiesDivisionTotalInvestedCapital',
+  '流动负债/负债合计(%)': 'currentLiabilitiesDivisionTotalLiabilities',
+  '非流动负债/负债合计(%)': 'nonCurrentLiabilitiesDivisionTotalLiabilities',
+  '流动比率': 'currentRatio',
+  '速动比率': 'quickRatio',
+  '保守速动比率': 'conservativeQuickRatio',
+  '产权比率': 'propertyOwnershipRatio',
+  '归属母公司股东的权益/负债合计': 'equityAttributableToShareholdersOfTheParentCompanyDivisionTotalLiabilities',
+  '归属母公司股东的权益/带息债务': 'equityAttributableToShareholdersOfTheParentCompanyDivisionInterestBearingDebt',
+  '有形资产/负债合计': 'totalTangibleAssetsDivisionLiabilities',
+  '有形资产/带息债务': 'tangibleAssetsDivisionInterestBearingDebt',
+  '有形资产/净债务': 'tangibleAssetsDivisionNetDebt',
+  '息税折旧摊销前利润/负债合计': 'profitBeforeInterestTaxDepreciationAndAmortizationDivisionTotalLiabilities',
+  '经营活动产生的现金流量净额/负债合计': 'netCashFlowGeneratedFromOperatingActivitiesDivisionTotalLiabilities',
+  '经营活动产生的现金流量净额/带息债务': 'netCashFlowGeneratedFromOperatingActivitiesDivisionInterestBearingDebt',
+  '经营活动产生的现金流量净额/流动负债': 'netCashFlowGeneratedFromOperatingActivitiesDivisionCurrentLiabilities',
+  '经营活动产生的现金流量净额/净债务': 'netCashFlowGeneratedFromOperatingActivitiesDivisionNetDebt',
+  '已获利息倍数': 'receivedInterestMultiple',
+  '长期债务与营运资金比率': 'longTermDebtToWorkingCapitalRatio',
+  '营业周期(天)': 'businessCycle',
+  '存货周转天数(天)': 'inventoryTurnoverDays',
+  '应收账款周转天数(天)': 'accountsReceivableTurnoverDays',
+  '存货周转率(次)': 'inventoryTurnover',
+  '应收账款周转率(次)': 'accountsReceivableTurnoverRate',
+  '流动资产周转率(次)': 'currentAssetTurnoverRate',
+  '固定资产周转率(次)': 'fixedAssetTurnoverRate',
+  '总资产周转率(次)': 'totalAssetTurnoverRate',
+  '营业总收入同比增长率(%)': 'yoyGrowthRateOfTotalOperatingRevenue',
+  '营业收入同比增长率(%)': 'yoyGrowthRateOfOperatingRevenue',
+  '销售商品提供劳务收到的现金/营业收入(%)': 'cashReceivedFromSellingGoodsAndProvidingServicesDivisionOperatingIncome',
+  '经营活动产生的现金流量净额/营业收入(%)': 'netCashFlowGeneratedFromOperatingActivitiesDivisionOperatingIncome',
+  '经营活动产生的现金流量净额/经营活动净收益(%)': 'netCashFlowGeneratedFromOperatingActivitiesDivisionNetIncomeFromOperatingActivities',
+  '资本支出/折旧摊销(%)': 'capitalExpenditureDivisionDepreciationAndAmortization'
+} as const;
+
+// 其他字段映射
+export const STOCK_FUND_KEY_MAP = {
+  '募资日期': 'fundDate',
+  '募资类型': 'fundType',
+  '募集资金': 'fundMoney',
+  '增发数量': 'additionalIssuanceQuantity',
+  '增发价格': 'additionalIssuancePrice',
+  '投资者': 'investor',
+  '类型': 'investorType',
+  '是否为公司高管': 'isCompanyExecutive',
+  '持股数': 'numberOfSharesHeld',
+  '投资额（元）': 'investmentAmount',
+  '锁定状态': 'lockedState'
+} as const;
+
+export const STOCK_TRADE_KEY_MAP = {
+  '交易日期': 'tradeDate',
+  '总成交额（元）': 'totalTradeAmount',
+  '成交价格（元）': 'tradePrice',
+  '成交数量（股）': 'tradeQuantity',
+  '买方账号名称': 'buyerName',
+  '买方主办券商': 'buyerBroker',
+  '卖方账号名称': 'sellerName',
+  '卖方主办券商': 'sellerBroker'
+} as const;
+
+export const STOCK_EVENT_KEY_MAP = {
+  '事件日期': 'eventDate',
+  '事件类型': 'eventType',
+  '事件标题': 'title'
+} as const;
+
+export const STOCK_NOTICE_KEY_MAP = {
+  '数据id': 'id',
+  '公告标题': 'title',
+  '公告文件': 'downUrl',
+  '公告原始文件': 'originalFileUrl',
+  '发布日期': 'time',
+  '公告详情': 'detailUrl'
+} as const;
+
+export const STOCK_SURVEY_KEY_MAP = {
+  '融资进度': 'financingProgress',
+  '融资金额': 'financingMoney',
+  '出让股份': 'transferOfShares',
+  '每股价格': 'pricePerShare',
+  '最新公告日': 'latestAnnouncementDate',
+  '预案公告日': 'planAnnouncementDate',
+  '董秘': 'companySecretary',
+  '董秘电话': 'companySecretaryPhone',
+  '董秘邮箱': 'companySecretaryEmail',
+  '行业分类': 'industry',
+  '主办券商': 'broker',
+  '增发对象': 'additionalIssuanceTarget',
+  '增发目的': 'purposeOfIssuance'
+} as const;
+
+export const STOCK_BROKER_KEY_MAP = {
+  '做市商': 'broker',
+  '初始库存': 'initialStock',
+  '初始价格': 'initialPrice'
+} as const;
+
+export const STOCK_PLEDGE_DATA_KEY_MAP = {
+  '累计质押': 'pledgeTotal',
+  '质押股东': 'pledgeShareholders',
+  '质权人': 'pledgePledgee'
+} as const;
+
+export const STOCK_PLEDGE_LOAN_RECORD_KEY_MAP = {
+  '股东名称': 'shareholderName',
+  '质押日期': 'pledgeDate',
+  '贷款金额': 'loanAmount',
+  '质权人': 'pledgee',
+  '质押占总股比': 'pledgeToTotalRatio',
+  '质押占所持股比': 'pledgeToEquityRatio',
+  '质押率': 'pledgeRate',
+  '质押股数': 'pledgedShares',
+  '质押起初日': 'pledgeStartDate',
+  '质押截止日': 'pledgeEndDate',
+  '质押说明': 'pledgeDescription'
+} as const;
+
+export const STOCK_REPORT_KEY_MAP = {
+  '研报标题': 'title',
+  '详情地址': 'detailUrl',
+  '发布日期': 'publishDate'
+} as const;
+
+// 报告类型映射
+export const DATE_TYPE_MAP = {
+  '年报': '001',
+  '中报': '002',
+  '一季报': '003',
+  '三季报': '004'
+} as const;

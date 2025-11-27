@@ -1,12 +1,92 @@
-import * as cheerio from 'cheerio';
 /**
  * HTML解析工具类
- * 使用Cheerio提供CSS选择器解析功能
+ * 使用正则表达式解析HTML内容，提供轻量级解析能力
  */
 export class HtmlParser {
-    $;
+    html;
     constructor(html) {
-        this.$ = cheerio.load(html);
+        this.html = html;
+    }
+    /**
+     * 简单的CSS选择器解析器
+     */
+    $(selector) {
+        // 确保selector是字符串类型
+        if (typeof selector !== 'string') {
+            console.warn('Selector must be a string, got:', typeof selector);
+            return { text: () => '', attr: () => undefined, length: 0, each: () => { }, find: () => ({ text: () => '', each: () => { }, length: 0 }) };
+        }
+        const elements = [];
+        // ID选择器
+        if (selector.includes('#')) {
+            const id = selector.replace('#', '');
+            const regex = new RegExp(`<[^>]*id=["']?${id}["']?[^>]*>([^<]*|.*?</[^>]*>)`, 'gi');
+            let match;
+            while ((match = regex.exec(this.html)) !== null) {
+                const content = match[0];
+                elements.push({
+                    text: () => content.replace(/<[^>]*>/g, '').trim(),
+                    attr: (attr) => {
+                        const attrRegex = new RegExp(`${attr}\\s*=\\s*["']([^"']*)["']`, 'i');
+                        const attrMatch = content.match(attrRegex);
+                        return attrMatch ? attrMatch[1] : undefined;
+                    },
+                    length: 1
+                });
+            }
+        }
+        // 类选择器
+        else if (selector.includes('.')) {
+            const className = selector.replace('.', '');
+            const regex = new RegExp(`<[^>]*class=["'][^"']*\\b${className}\\b[^"']*["'][^>]*>([^<]*|.*?</[^>]*>)`, 'gi');
+            let match;
+            while ((match = regex.exec(this.html)) !== null) {
+                const content = match[0];
+                elements.push({
+                    text: () => content.replace(/<[^>]*>/g, '').trim(),
+                    attr: (attr) => {
+                        const attrRegex = new RegExp(`${attr}\\s*=\\s*["']([^"']*)["']`, 'i');
+                        const attrMatch = content.match(attrRegex);
+                        return attrMatch ? attrMatch[1] : undefined;
+                    },
+                    length: 1
+                });
+            }
+        }
+        // 标签选择器
+        else {
+            const regex = new RegExp(`<${selector}[^>]*>([^<]*|.*?</${selector}>)`, 'gi');
+            let match;
+            while ((match = regex.exec(this.html)) !== null) {
+                const content = match[0];
+                elements.push({
+                    text: () => content.replace(/<[^>]*>/g, '').trim(),
+                    attr: (attr) => {
+                        const attrRegex = new RegExp(`${attr}\\s*=\\s*["']([^"']*)["']`, 'i');
+                        const attrMatch = content.match(attrRegex);
+                        return attrMatch ? attrMatch[1] : undefined;
+                    },
+                    length: 1
+                });
+            }
+        }
+        return {
+            text: () => elements.map(el => el.text()).join(' '),
+            attr: (attr) => elements[0]?.attr(attr),
+            length: elements.length,
+            each: (callback) => {
+                elements.forEach((element, index) => callback(index, element));
+            },
+            find: (innerSelector) => {
+                // 简化实现：在第一个元素的内容中继续查找
+                if (elements[0]) {
+                    const content = elements[0].text();
+                    const innerParser = new HtmlParser(content);
+                    return innerParser.$(innerSelector);
+                }
+                return { text: () => '', each: () => { }, length: 0 };
+            }
+        };
     }
     /**
      * 提取文本内容
