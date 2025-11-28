@@ -1,7 +1,7 @@
 import { StockQueryResult } from '../types/stock.js';
 /**
- * 简化的东方财富网数据服务类
- * 先提供基本功能，后续可以逐步完善
+ * 东方财富网数据服务类
+ * 提供完整的股票数据查询功能
  */
 export declare class EastMoneyServiceSimple {
     private readonly baseUrl;
@@ -11,7 +11,7 @@ export declare class EastMoneyServiceSimple {
      */
     getStockInfo(codes: string[]): Promise<StockQueryResult>;
     /**
-     * 获取单个股票的模拟数据（等待真实的东方财富API集成）
+     * 获取单个股票的东方财富网API数据
      */
     private getSingleStockInfo;
     /**

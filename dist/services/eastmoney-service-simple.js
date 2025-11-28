@@ -1,7 +1,8 @@
 import { DataSource } from '../types/stock.js';
+import { URLSearchParams } from 'url';
 /**
- * 简化的东方财富网数据服务类
- * 先提供基本功能，后续可以逐步完善
+ * 东方财富网数据服务类
+ * 提供完整的股票数据查询功能
  */
 export class EastMoneyServiceSimple {
     baseUrl = 'https://quote.eastmoney.com';
@@ -41,43 +42,46 @@ export class EastMoneyServiceSimple {
         }
     }
     /**
-     * 获取单个股票的模拟数据（等待真实的东方财富API集成）
+     * 获取单个股票的东方财富网API数据
      */
     async getSingleStockInfo(code) {
         try {
-            // 这里应该调用东方财富的真实API，现在先返回模拟数据
-            // 模拟一些示例数据，但绝不使用模拟数据
-            const mockData = {
-                '000001': { name: '平安银行', price: 12.50, change: 0.15, changePercent: '+1.21%', industry: '银行' },
-                '000002': { name: '万科A', price: 15.80, change: -0.30, changePercent: '-1.86%', industry: '房地产' },
-                '600036': { name: '招商银行', price: 35.20, change: 0.80, changePercent: '+2.32%', industry: '银行' },
-                '600519': { name: '贵州茅台', price: 1680.00, change: 20.00, changePercent: '+1.20%', industry: '食品饮料' },
-                '000858': { name: '五粮液', price: 145.50, change: -2.50, changePercent: '-1.69%', industry: '食品饮料' }
-            };
-            const data = mockData[code];
-            if (!data) {
-                return {
-                    code,
-                    name: '未知股票',
-                    price: 0,
-                    change: 0,
-                    changePercent: '0%',
-                    industry: '',
-                    volume: '0',
-                    amount: '0',
-                    market: this.getMarketFromCode(code),
-                    timestamp: Date.now()
-                };
+            // 调用东方财富网API获取股票信息
+            const url = `${this.dataBaseUrl}/api/data/v1/get`;
+            const params = new URLSearchParams({
+                'sortFields': '1',
+                'filter': `(SECURITY_CODE="${code}")`,
+                'pageNumber': '1',
+                'pageSize': '1',
+                'showFields': 'f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f14,f20,f21,f23,f24,f25,f26,f22,f33,f34,f35,f36,f37,f38,f39,f40,f41,f57,f58,f124,f125,f127,f128,f115,f152',
+                'source': 'WEB',
+                'client': 'WEB'
+            });
+            const response = await fetch(`${url}?${params.toString()}`, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Referer': 'https://quote.eastmoney.com'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
+            const data = await response.json();
+            if (!data.result || !data.data || data.data.length === 0) {
+                throw new Error('未找到股票数据');
+            }
+            const stock = data.data[0];
+            const changeNum = parseFloat(stock.f43) || 0;
+            const changePercentNum = parseFloat(stock.f170) || 0;
             return {
-                code,
-                name: data.name || '',
-                price: data.price || 0,
-                change: data.change || 0,
-                changePercent: data.changePercent || '0%',
-                industry: data.industry || '',
-                volume: '0',
-                amount: '0',
+                code: stock.f12 || code,
+                name: stock.f14 || '未知股票',
+                price: parseFloat(stock.f2) || 0,
+                change: changeNum,
+                changePercent: changePercentNum >= 0 ? `+${changePercentNum.toFixed(2)}%` : `${changePercentNum.toFixed(2)}%`,
+                industry: stock.f62 || '',
+                volume: stock.f5 || '0',
+                amount: stock.f6 || '0',
                 market: this.getMarketFromCode(code),
                 timestamp: Date.now()
             };
@@ -92,27 +96,45 @@ export class EastMoneyServiceSimple {
      */
     async searchStock(keyword) {
         try {
-            // 模拟搜索结果，基于关键词匹配
-            const mockData = [
-                { code: '000001', name: '平安银行', industry: '银行' },
-                { code: '000002', name: '万科A', industry: '房地产' },
-                { code: '600036', name: '招商银行', industry: '银行' },
-                { code: '600519', name: '贵州茅台', industry: '食品饮料' },
-                { code: '000858', name: '五粮液', industry: '食品饮料' }
-            ];
-            const results = mockData.filter(stock => stock.name.includes(keyword) ||
-                stock.code.includes(keyword) ||
-                stock.industry.includes(keyword));
-            const stocks = results.map(stock => ({
-                code: stock.code,
-                name: stock.name,
-                price: Math.random() * 200, // 模拟价格
-                change: (Math.random() - 0.5) * 10,
-                changePercent: ((Math.random() - 0.5) * 20).toFixed(2) + '%',
-                industry: stock.industry,
-                volume: '0',
-                amount: '0',
-                market: this.getMarketFromCode(stock.code),
+            // 调用东方财富网API搜索股票
+            const url = `${this.dataBaseUrl}/api/data/v1/get`;
+            const params = new URLSearchParams({
+                'sortFields': '1',
+                'filter': `(SECURITY_CODE_LIKE="%${keyword}%") OR SECURITY_NAME_ABBR_LIKE="%${keyword}%")`,
+                'pageNumber': '1',
+                'pageSize': '20',
+                'showFields': 'f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f14,f20,f21,f23,f24,f25,f26,f22,f33,f34,f35,f36,f37,f38,f39,f40,f41,f57,f58,f124,f125,f127,f128,f115,f152',
+                'source': 'WEB',
+                'client': 'WEB'
+            });
+            const response = await fetch(`${url}?${params.toString()}`, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Referer': 'https://quote.eastmoney.com'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            const data = await response.json();
+            if (!data.result || !data.data || data.data.length === 0) {
+                return {
+                    success: false,
+                    data: [],
+                    errors: ['未找到相关股票'],
+                    source: DataSource.EASTMONEY
+                };
+            }
+            const stocks = data.data.map((stock) => ({
+                code: stock.f12 || '',
+                name: stock.f14 || '',
+                price: parseFloat(stock.f2) || 0,
+                change: parseFloat(stock.f43) || 0,
+                changePercent: stock.f170 || '',
+                industry: stock.f62 || '',
+                volume: stock.f5 || '0',
+                amount: stock.f6 || '0',
+                market: this.getMarketFromCode(stock.f12 || ''),
                 timestamp: Date.now()
             }));
             return {
@@ -135,24 +157,45 @@ export class EastMoneyServiceSimple {
      */
     async getPopularStocks() {
         try {
-            // 模拟热门股票
-            const popularStocks = [
-                { code: '600519', name: '贵州茅台', industry: '食品饮料' },
-                { code: '000001', name: '平安银行', industry: '银行' },
-                { code: '600036', name: '招商银行', industry: '银行' },
-                { code: '000002', name: '万科A', industry: '房地产' },
-                { code: '000858', name: '五粮液', industry: '食品饮料' }
-            ];
-            const stocks = popularStocks.map(stock => ({
-                code: stock.code,
-                name: stock.name,
-                price: Math.random() * 200,
-                change: (Math.random() - 0.5) * 10,
-                changePercent: ((Math.random() - 0.5) * 20).toFixed(2) + '%',
-                industry: stock.industry,
-                volume: '0',
-                amount: '0',
-                market: this.getMarketFromCode(stock.code),
+            // 调用东方财富网API获取热门股票
+            const url = `${this.dataBaseUrl}/api/data/v1/get`;
+            const params = new URLSearchParams({
+                'sortFields': '1,-1',
+                'sortRules': '[-1]',
+                'pageNumber': '1',
+                'pageSize': '50',
+                'showFields': 'f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f14,f20,f21,f23,f24,f25,f26,f22,f33,f34,f35,f36,f37,f38,f39,f40,f41,f57,f58,f124,f125,f127,f128,f115,f152',
+                'source': 'WEB',
+                'client': 'WEB'
+            });
+            const response = await fetch(`${url}?${params.toString()}`, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Referer': 'https://quote.eastmoney.com'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            const data = await response.json();
+            if (!data.result || !data.data || data.data.length === 0) {
+                return {
+                    success: false,
+                    data: [],
+                    errors: ['未找到热门股票数据'],
+                    source: DataSource.EASTMONEY
+                };
+            }
+            const stocks = data.data.map((stock) => ({
+                code: stock.f12 || '',
+                name: stock.f14 || '',
+                price: parseFloat(stock.f2) || 0,
+                change: parseFloat(stock.f43) || 0,
+                changePercent: stock.f170 || '',
+                industry: stock.f62 || '',
+                volume: stock.f5 || '0',
+                amount: stock.f6 || '0',
+                market: this.getMarketFromCode(stock.f12 || ''),
                 timestamp: Date.now()
             }));
             return {
