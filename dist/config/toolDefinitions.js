@@ -58,8 +58,8 @@ export const BASIC_TOOLS = [
                 },
                 data_source: {
                     type: 'string',
-                    enum: ['ipo3'],
-                    description: '数据源选择，使用IPO3.com提供详细的公司信息'
+                    enum: ['ipo3', 'eastmoney'],
+                    description: '数据源选择，ipo3-使用IPO3.com（已废弃），eastmoney-使用东方财富网（推荐）'
                 }
             },
             required: ['codes']
@@ -74,6 +74,12 @@ export const BASIC_TOOLS = [
                 keyword: {
                     type: 'string',
                     description: '搜索关键词，可以是股票名称或代码'
+                },
+                data_source: {
+                    type: 'string',
+                    enum: ['ipo3', 'eastmoney'],
+                    description: '数据源选择，ipo3-使用IPO3.com（已废弃），eastmoney-使用东方财富网（推荐）',
+                    default: 'eastmoney'
                 }
             },
             required: ['keyword']
@@ -87,8 +93,9 @@ export const BASIC_TOOLS = [
             properties: {
                 data_source: {
                     type: 'string',
-                    enum: ['ipo3'],
-                    description: '数据源选择，可选'
+                    enum: ['ipo3', 'eastmoney'],
+                    description: '数据源选择，ipo3-使用IPO3.com（已废弃），eastmoney-使用东方财富网（推荐）',
+                    default: 'eastmoney'
                 }
             }
         }

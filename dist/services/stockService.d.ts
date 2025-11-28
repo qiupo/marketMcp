@@ -1,10 +1,10 @@
 import { StockQueryParams, StockQueryResult, DataSource } from '../types/stock.js';
 /**
  * 股票服务管理器
- * 使用IPO3.com作为主要数据源
+ * 支持东方财富网数据源
  */
 export declare class StockService {
-    private ipo3Service;
+    private eastMoneyService;
     /**
      * 获取股票信息
      * @param params 查询参数
@@ -25,11 +25,11 @@ export declare class StockService {
     /**
      * 搜索股票
      */
-    searchStock(keyword: string): Promise<StockQueryResult>;
+    searchStock(keyword: string, dataSource?: DataSource): Promise<StockQueryResult>;
     /**
      * 获取热门股票
      */
-    getPopularStocks(): Promise<StockQueryResult>;
+    getPopularStocks(dataSource?: DataSource): Promise<StockQueryResult>;
     /**
      * 验证股票代码格式
      */
@@ -39,55 +39,55 @@ export declare class StockService {
      */
     normalizeStockCode(code: string): string;
     /**
-     * 获取公司详细信息
+     * 获取公司详细信息（待实现）
      */
-    getCompanyInfo(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").CompanyInfo>;
+    getCompanyInfo(stockCode: string, englishKey?: boolean): Promise<any>;
     /**
-     * 获取利润表数据
+     * 获取利润表数据（待实现）
      */
-    getIncomeStatementList(stockCode: string, dateType?: string, englishKey?: boolean): Promise<import("../types/stock.js").IncomeStatement[]>;
+    getIncomeStatementList(stockCode: string, dateType?: string, englishKey?: boolean): Promise<any[]>;
     /**
-     * 获取资产负债表数据
+     * 获取资产负债表数据（待实现）
      */
-    getBalanceSheetList(stockCode: string, dateType?: string, englishKey?: boolean): Promise<import("../types/stock.js").BalanceSheet[]>;
+    getBalanceSheetList(stockCode: string, dateType?: string, englishKey?: boolean): Promise<any[]>;
     /**
-     * 获取现金流量表数据
+     * 获取现金流量表数据（待实现）
      */
-    getCashFlowStatementList(stockCode: string, dateType?: string, englishKey?: boolean): Promise<import("../types/stock.js").CashFlowStatement[]>;
+    getCashFlowStatementList(stockCode: string, dateType?: string, englishKey?: boolean): Promise<any[]>;
     /**
-     * 获取财务分析数据
+     * 获取财务分析数据（待实现）
      */
-    getFinancialAnalysisList(stockCode: string, dateType?: string, englishKey?: boolean): Promise<import("../types/stock.js").FinancialAnalysis[]>;
+    getFinancialAnalysisList(stockCode: string, dateType?: string, englishKey?: boolean): Promise<any[]>;
     /**
-     * 获取募资明细
+     * 获取募资明细（待实现）
      */
-    getStockFundList(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").FundInfo[]>;
+    getStockFundList(stockCode: string, englishKey?: boolean): Promise<any[]>;
     /**
-     * 获取交易明细
+     * 获取交易明细（待实现）
      */
-    getStockTradeList(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").TradeInfo[]>;
+    getStockTradeList(stockCode: string, englishKey?: boolean): Promise<any[]>;
     /**
-     * 获取事件提醒
+     * 获取事件提醒（待实现）
      */
-    getStockEventList(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").EventInfo[]>;
+    getStockEventList(stockCode: string, englishKey?: boolean): Promise<any[]>;
     /**
-     * 获取公告列表
+     * 获取公告列表（待实现）
      */
-    getStockNoticeList(stockCode: string, page?: number): Promise<import("../types/stock.js").PaginatedResponse<import("../types/stock.js").NoticeInfo>>;
+    getStockNoticeList(stockCode: string, page?: number): Promise<any>;
     /**
-     * 获取定增计划
+     * 获取定增计划（待实现）
      */
-    getStockSurvey(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").SurveyInfo>;
+    getStockSurvey(stockCode: string, englishKey?: boolean): Promise<any>;
     /**
-     * 获取做市商信息
+     * 获取做市商信息（待实现）
      */
-    getStockBrokerList(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").BrokerInfo[]>;
+    getStockBrokerList(stockCode: string, englishKey?: boolean): Promise<any[]>;
     /**
-     * 获取质押信息
+     * 获取质押信息（待实现）
      */
-    getStockPledgeData(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").PledgeData>;
+    getStockPledgeData(stockCode: string, englishKey?: boolean): Promise<any>;
     /**
-     * 获取研报列表
+     * 获取研报列表（待实现）
      */
-    getStockReportList(stockCode: string, englishKey?: boolean): Promise<import("../types/stock.js").ReportInfo[]>;
+    getStockReportList(stockCode: string, englishKey?: boolean): Promise<any[]>;
 }

@@ -1,11 +1,11 @@
-import { IPO3ServiceV2 } from './ipo3-service-v2.js';
+import { EastMoneyServiceSimple } from './eastmoney-service-simple.js';
 import { DataSource } from '../types/stock.js';
 /**
  * 股票服务管理器
- * 使用IPO3.com作为主要数据源
+ * 支持东方财富网数据源
  */
 export class StockService {
-    ipo3Service = new IPO3ServiceV2();
+    eastMoneyService = new EastMoneyServiceSimple();
     /**
      * 获取股票信息
      * @param params 查询参数
@@ -27,9 +27,14 @@ export class StockService {
     async getFromSpecificSource(codes, dataSource) {
         switch (dataSource) {
             case DataSource.IPO3:
-                return this.ipo3Service.getStockInfo(codes);
+                console.warn('IPO3.com数据源已废弃，使用东方财富网数据源替代');
+                // 降级到东方财富网数据源
+                return this.eastMoneyService.getStockInfo(codes);
+            case DataSource.EASTMONEY:
+                return this.eastMoneyService.getStockInfo(codes);
             default:
-                return this.getFromSpecificSource(codes, DataSource.IPO3);
+                // 默认使用东方财富网
+                return this.eastMoneyService.getStockInfo(codes);
         }
     }
     /**
@@ -74,25 +79,28 @@ export class StockService {
     /**
      * 搜索股票
      */
-    async searchStock(keyword) {
-        return this.ipo3Service.searchStock(keyword);
+    async searchStock(keyword, dataSource = DataSource.EASTMONEY) {
+        switch (dataSource) {
+            case DataSource.IPO3:
+                console.warn('IPO3.com数据源已废弃，使用东方财富网数据源替代');
+                return this.eastMoneyService.searchStock(keyword);
+            case DataSource.EASTMONEY:
+            default:
+                return this.eastMoneyService.searchStock(keyword);
+        }
     }
     /**
      * 获取热门股票
      */
-    async getPopularStocks() {
-        try {
-            // 使用搜索功能获取热门股票示例
-            const result = await this.ipo3Service.searchStock('热门');
-            if (!result.success || result.data.length === 0) {
-                // 如果搜索无结果，返回一些示例代码
-                return await this.ipo3Service.getStockInfo(['430002', '430003', '430004', '430005', '430006']);
-            }
-            return result;
-        }
-        catch (error) {
-            // 降级处理：返回一些常见的新三板股票代码
-            return await this.ipo3Service.getStockInfo(['430002', '430003', '430004', '430005', '430006']);
+    async getPopularStocks(dataSource = DataSource.EASTMONEY) {
+        switch (dataSource) {
+            case DataSource.IPO3:
+                console.warn('IPO3.com数据源已废弃，使用东方财富网数据源替代');
+                // 降级到东方财富网数据源
+                return this.eastMoneyService.getPopularStocks();
+            case DataSource.EASTMONEY:
+            default:
+                return this.eastMoneyService.getPopularStocks();
         }
     }
     /**
@@ -109,83 +117,83 @@ export class StockService {
         // 去除市场前缀，只保留6位数字
         return code.replace(/^(sh|sz|bj)/i, '');
     }
-    // ==================== IPO3 增强功能 ====================
+    // ==================== 增强功能（占位方法）====================
     /**
-     * 获取公司详细信息
+     * 获取公司详细信息（待实现）
      */
     async getCompanyInfo(stockCode, englishKey = false) {
-        return await this.ipo3Service.getCompanyInfo(stockCode, englishKey);
+        return this.eastMoneyService.getCompanyInfo(stockCode, englishKey);
     }
     /**
-     * 获取利润表数据
+     * 获取利润表数据（待实现）
      */
     async getIncomeStatementList(stockCode, dateType = '年报', englishKey = false) {
-        return await this.ipo3Service.getIncomeStatementList(stockCode, dateType, englishKey);
+        return this.eastMoneyService.getIncomeStatementList(stockCode, dateType, englishKey);
     }
     /**
-     * 获取资产负债表数据
+     * 获取资产负债表数据（待实现）
      */
     async getBalanceSheetList(stockCode, dateType = '年报', englishKey = false) {
-        return await this.ipo3Service.getBalanceSheetList(stockCode, dateType, englishKey);
+        return this.eastMoneyService.getBalanceSheetList(stockCode, dateType, englishKey);
     }
     /**
-     * 获取现金流量表数据
+     * 获取现金流量表数据（待实现）
      */
     async getCashFlowStatementList(stockCode, dateType = '年报', englishKey = false) {
-        return await this.ipo3Service.getCashFlowStatementList(stockCode, dateType, englishKey);
+        return this.eastMoneyService.getCashFlowStatementList(stockCode, dateType, englishKey);
     }
     /**
-     * 获取财务分析数据
+     * 获取财务分析数据（待实现）
      */
     async getFinancialAnalysisList(stockCode, dateType = '年报', englishKey = false) {
-        return await this.ipo3Service.getFinancialAnalysisList(stockCode, dateType, englishKey);
+        return this.eastMoneyService.getFinancialAnalysisList(stockCode, dateType, englishKey);
     }
     /**
-     * 获取募资明细
+     * 获取募资明细（待实现）
      */
     async getStockFundList(stockCode, englishKey = false) {
-        return await this.ipo3Service.getStockFundList(stockCode, englishKey);
+        return this.eastMoneyService.getStockFundList(stockCode, englishKey);
     }
     /**
-     * 获取交易明细
+     * 获取交易明细（待实现）
      */
     async getStockTradeList(stockCode, englishKey = false) {
-        return await this.ipo3Service.getStockTradeList(stockCode, englishKey);
+        return this.eastMoneyService.getStockTradeList(stockCode, englishKey);
     }
     /**
-     * 获取事件提醒
+     * 获取事件提醒（待实现）
      */
     async getStockEventList(stockCode, englishKey = false) {
-        return await this.ipo3Service.getStockEventList(stockCode, englishKey);
+        return this.eastMoneyService.getStockEventList(stockCode, englishKey);
     }
     /**
-     * 获取公告列表
+     * 获取公告列表（待实现）
      */
     async getStockNoticeList(stockCode, page = 1) {
-        return await this.ipo3Service.getStockNoticeList(stockCode, page);
+        return this.eastMoneyService.getStockNoticeList(stockCode, page);
     }
     /**
-     * 获取定增计划
+     * 获取定增计划（待实现）
      */
     async getStockSurvey(stockCode, englishKey = false) {
-        return await this.ipo3Service.getStockSurvey(stockCode, englishKey);
+        return this.eastMoneyService.getStockSurvey(stockCode, englishKey);
     }
     /**
-     * 获取做市商信息
+     * 获取做市商信息（待实现）
      */
     async getStockBrokerList(stockCode, englishKey = false) {
-        return await this.ipo3Service.getStockBrokerList(stockCode, englishKey);
+        return this.eastMoneyService.getStockBrokerList(stockCode, englishKey);
     }
     /**
-     * 获取质押信息
+     * 获取质押信息（待实现）
      */
     async getStockPledgeData(stockCode, englishKey = false) {
-        return await this.ipo3Service.getStockPledgeData(stockCode, englishKey);
+        return this.eastMoneyService.getStockPledgeData(stockCode, englishKey);
     }
     /**
-     * 获取研报列表
+     * 获取研报列表（待实现）
      */
     async getStockReportList(stockCode, englishKey = false) {
-        return await this.ipo3Service.getStockReportList(stockCode, englishKey);
+        return this.eastMoneyService.getStockReportList(stockCode, englishKey);
     }
 }

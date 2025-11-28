@@ -109,7 +109,8 @@ export interface IPO3Response {
 
 // API数据源
 export enum DataSource {
-  IPO3 = 'ipo3'
+  IPO3 = 'ipo3',           // IPO3.com（已废弃）
+  EASTMONEY = 'eastmoney'   // 东方财富网（推荐）
 }
 
 // 查询参数

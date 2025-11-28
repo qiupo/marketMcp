@@ -94,7 +94,8 @@ export interface IPO3Response {
     [key: string]: string | number | EquityStructure[] | ShareholderInfo[] | SeniorManagement[] | News[];
 }
 export declare enum DataSource {
-    IPO3 = "ipo3"
+    IPO3 = "ipo3",// IPO3.com（已废弃）
+    EASTMONEY = "eastmoney"
 }
 export interface StockQueryParams {
     codes: string[];

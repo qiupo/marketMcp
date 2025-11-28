@@ -32,7 +32,6 @@ async function basicTest() {
       'tsconfig.json',
       'src/index.ts',
       'src/services/stockService.ts',
-      'src/services/ipo3-service-v2.ts',
       'src/types/stock.ts',
       'dist/index.js'
     ];
