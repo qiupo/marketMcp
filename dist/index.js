@@ -53,48 +53,6 @@ class MarketMCPServer {
                             required: ['codes']
                         }
                     },
-                    {
-                        name: 'search_stock',
-                        description: '搜索股票信息，支持按名称或代码搜索，返回匹配的股票列表',
-                        inputSchema: {
-                            type: 'object',
-                            properties: {
-                                keyword: {
-                                    type: 'string',
-                                    description: '搜索关键词，可以是股票名称或代码'
-                                }
-                            },
-                            required: ['keyword']
-                        }
-                    },
-                    {
-                        name: 'get_popular_stocks',
-                        description: '获取热门股票行情，包括涨跌幅、成交量等关键指标',
-                        inputSchema: {
-                            type: 'object',
-                            properties: {
-                                data_source: {
-                                    type: 'string',
-                                    enum: ['ipo3'],
-                                    description: '数据源选择，可选'
-                                }
-                            }
-                        }
-                    },
-                    {
-                        name: 'validate_stock_code',
-                        description: '验证股票代码格式',
-                        inputSchema: {
-                            type: 'object',
-                            properties: {
-                                code: {
-                                    type: 'string',
-                                    description: '要验证的股票代码'
-                                }
-                            },
-                            required: ['code']
-                        }
-                    },
                 ]
             };
         });
@@ -105,12 +63,6 @@ class MarketMCPServer {
                 switch (name) {
                     case 'get_stock_info':
                         return await this.handleGetStockInfo(args);
-                    case 'search_stock':
-                        return await this.handleSearchStock(args);
-                    case 'get_popular_stocks':
-                        return await this.handleGetPopularStocks(args);
-                    case 'validate_stock_code':
-                        return await this.handleValidateStockCode(args);
                     default:
                         throw new Error(`未知工具: ${name}`);
                 }
@@ -191,7 +143,6 @@ class MarketMCPServer {
         else {
             throw new Error('股票代码格式错误');
         }
-        const dataSource = data_source;
         const result = await this.stockService.getBatchStockInfo(codesArray);
         if (result.success && result.data.length > 0) {
             const formattedData = this.formatStockData(result.data, result.source);
@@ -214,74 +165,6 @@ class MarketMCPServer {
                 ]
             };
         }
-    }
-    async handleSearchStock(args) {
-        const { keyword } = args;
-        const result = await this.stockService.searchStock(keyword);
-        if (result.success && result.data.length > 0) {
-            const formattedData = this.formatStockData(result.data, result.source);
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: `搜索结果 (${result.source}):\n\n${formattedData}`
-                    }
-                ]
-            };
-        }
-        else {
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: `搜索无结果: ${result.errors?.join(', ') || '未知错误'}`
-                    }
-                ]
-            };
-        }
-    }
-    async handleGetPopularStocks(args) {
-        const { data_source } = args;
-        const dataSource = data_source;
-        const result = await this.stockService.getPopularStocks();
-        if (result.success && result.data.length > 0) {
-            const formattedData = this.formatStockData(result.data, result.source);
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: `热门股票行情 (${result.source}):\n\n${formattedData}`
-                    }
-                ]
-            };
-        }
-        else {
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: `获取热门股票失败: ${result.errors?.join(', ') || '未知错误'}`
-                    }
-                ]
-            };
-        }
-    }
-    async handleValidateStockCode(args) {
-        const { code } = args;
-        const isValid = this.stockService.validateStockCode(code);
-        const normalizedCode = this.stockService.normalizeStockCode(code);
-        return {
-            content: [
-                {
-                    type: 'text',
-                    text: `股票代码验证结果:\n` +
-                        `原始代码: ${code}\n` +
-                        `标准化代码: ${normalizedCode}\n` +
-                        `格式有效性: ${isValid ? '✓ 有效' : '✗ 无效'}\n` +
-                        `建议: ${isValid ? '代码格式正确' : '请使用6位数字股票代码'}`
-                }
-            ]
-        };
     }
     // 提示处理方法
     async handleStockAnalysisPrompt(args) {
@@ -325,10 +208,8 @@ class MarketMCPServer {
             prompt += `，重点关注${sector}板块`;
         }
         prompt += '。';
-        const result = await this.stockService.getPopularStocks();
-        if (result.success && result.data.length > 0) {
-            prompt += '\n\n热门股票参考:\n' + this.formatStockData(result.data, result.source);
-        }
+        // TODO: 当需要时可以重新实现热门股票功能
+        // prompt += '\n\n热门股票参考数据待实现';
         return {
             messages: [
                 {

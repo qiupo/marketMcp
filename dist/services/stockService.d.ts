@@ -18,20 +18,4 @@ export declare class StockService {
      * 批量获取股票信息
      */
     getBatchStockInfo(codes: string[]): Promise<StockQueryResult>;
-    /**
-     * 搜索股票
-     */
-    searchStock(keyword: string): Promise<StockQueryResult>;
-    /**
-     * 获取热门股票
-     */
-    getPopularStocks(): Promise<StockQueryResult>;
-    /**
-     * 验证股票代码格式
-     */
-    validateStockCode(code: string): boolean;
-    /**
-     * 标准化股票代码
-     */
-    normalizeStockCode(code: string): string;
 }

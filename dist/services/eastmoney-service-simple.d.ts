@@ -19,23 +19,7 @@ export declare class EastMoneyServiceSimple {
      */
     getSingleStockInfo(code: string): Promise<StockInfo | null>;
     /**
-     * 搜索股票（使用热门股票接口进行简单搜索）
-     */
-    searchStock(keyword: string): Promise<StockQueryResult>;
-    /**
-     * 获取热门股票（使用一些知名股票代码）
-     */
-    getPopularStocks(): Promise<StockQueryResult>;
-    /**
      * 根据股票代码判断市场
      */
     private getMarketFromCode;
-    /**
-     * 验证股票代码格式
-     */
-    validateStockCode(code: string): boolean;
-    /**
-     * 标准化股票代码
-     */
-    normalizeStockCode(code: string): string;
 }

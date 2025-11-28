@@ -60,13 +60,9 @@ async function testMCPServer() {
       server.kill();
 
       // 分析结果
-      if (responseData.includes('get_stock_info') &&
-          responseData.includes('search_stock') &&
-          responseData.includes('get_popular_stocks')) {
+      if (responseData.includes('get_stock_info')) {
         console.log('✅ MCP服务器工具列表正常');
         console.log('✅ 核心股票查询工具可用');
-        console.log('✅ 搜索功能可用');
-        console.log('✅ 热门股票功能可用');
 
         const toolCount = (responseData.match(/"name":/g) || []).length;
         console.log(`📊 可用工具数量: ${toolCount}`);
@@ -74,9 +70,6 @@ async function testMCPServer() {
         console.log('\n🎉 MCP服务器功能测试通过！');
         console.log('📋 服务器已成功简化，只保留核心功能:');
         console.log('   ✅ get_stock_info - 股票信息查询');
-        console.log('   ✅ search_stock - 股票搜索');
-        console.log('   ✅ get_popular_stocks - 热门股票');
-        console.log('   ✅ validate_stock_code - 代码验证');
 
       } else {
         console.log('❌ MCP服务器响应异常');

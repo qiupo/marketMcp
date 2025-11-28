@@ -60,31 +60,4 @@ export class StockService {
     };
   }
 
-  /**
-   * 搜索股票
-   */
-  async searchStock(keyword: string): Promise<StockQueryResult> {
-    return this.eastMoneyService.searchStock(keyword);
   }
-
-  /**
-   * 获取热门股票
-   */
-  async getPopularStocks(): Promise<StockQueryResult> {
-    return this.eastMoneyService.getPopularStocks();
-  }
-
-  /**
-   * 验证股票代码格式
-   */
-  validateStockCode(code: string): boolean {
-    return this.eastMoneyService.validateStockCode(code);
-  }
-
-  /**
-   * 标准化股票代码
-   */
-  normalizeStockCode(code: string): string {
-    return this.eastMoneyService.normalizeStockCode(code);
-  }
-}

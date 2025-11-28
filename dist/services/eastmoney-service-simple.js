@@ -10,7 +10,7 @@ export class EastMoneyServiceSimple {
      * 东方财富的格式：0.000001,1.600519 (0=深市，1=沪市)
      */
     getEastMoneyCode(code) {
-        const cleanCode = this.normalizeStockCode(code);
+        const cleanCode = code.replace(/^(sh|sz|bj)/i, '');
         if (code.startsWith('6') || code.startsWith('9')) {
             return `1.${cleanCode}`; // 沪市
         }
@@ -62,7 +62,7 @@ export class EastMoneyServiceSimple {
                     industry: '',
                     volume: '0',
                     amount: '0',
-                    market: this.getMarketFromCode(stock.f12 || ''),
+                    market: this.getMarketFromCode(stock.f12 || '000001'),
                     timestamp: Date.now()
                 };
             });
@@ -92,52 +92,6 @@ export class EastMoneyServiceSimple {
         return null;
     }
     /**
-     * 搜索股票（使用热门股票接口进行简单搜索）
-     */
-    async searchStock(keyword) {
-        try {
-            // 获取一些热门股票，然后在客户端进行简单的关键词匹配
-            const result = await this.getPopularStocks();
-            if (!result.success) {
-                return result;
-            }
-            const filteredStocks = result.data.filter(stock => stock.name.includes(keyword) || stock.code.includes(keyword));
-            return {
-                success: filteredStocks.length > 0,
-                data: filteredStocks,
-                errors: filteredStocks.length === 0 ? ['未找到相关股票'] : undefined,
-                source: DataSource.EASTMONEY
-            };
-        }
-        catch (error) {
-            return {
-                success: false,
-                data: [],
-                errors: [error instanceof Error ? error.message : '搜索失败'],
-                source: DataSource.EASTMONEY
-            };
-        }
-    }
-    /**
-     * 获取热门股票（使用一些知名股票代码）
-     */
-    async getPopularStocks() {
-        // 一些热门股票代码
-        const popularCodes = [
-            '000001', // 平安银行
-            '000002', // 万科A
-            '000858', // 五粮液
-            '002415', // 海康威视
-            '002460', // 赣锋锂业
-            '600000', // 浦发银行
-            '600036', // 招商银行
-            '600519', // 贵州茅台
-            '600644', // 乐山电力
-            '600887', // 伊利股份
-        ];
-        return await this.getStockInfo(popularCodes);
-    }
-    /**
      * 根据股票代码判断市场
      */
     getMarketFromCode(code) {
@@ -153,18 +107,5 @@ export class EastMoneyServiceSimple {
         else {
             return 'sh'; // 默认
         }
-    }
-    /**
-     * 验证股票代码格式
-     */
-    validateStockCode(code) {
-        const cleanCode = code.replace(/^(sh|sz|bj)/i, '');
-        return /^[0-9]{6}$/.test(cleanCode);
-    }
-    /**
-     * 标准化股票代码
-     */
-    normalizeStockCode(code) {
-        return code.replace(/^(sh|sz|bj)/i, '');
     }
 }
