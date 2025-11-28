@@ -1,34 +1,74 @@
 import { DataSource } from '../types/stock.js';
-import { URLSearchParams } from 'url';
 /**
  * 东方财富网数据服务类
  * 提供完整的股票数据查询功能
  */
 export class EastMoneyServiceSimple {
-    baseUrl = 'https://quote.eastmoney.com';
-    dataBaseUrl = 'https://datacenter.eastmoney.com';
+    baseUrl = 'https://push2.eastmoney.com/api/qt/ulist.np/get';
+    /**
+     * 根据股票代码获取东方财富代码格式
+     * 东方财富的格式：0.000001,1.600519 (0=深市，1=沪市)
+     */
+    getEastMoneyCode(code) {
+        const cleanCode = this.normalizeStockCode(code);
+        if (code.startsWith('6') || code.startsWith('9')) {
+            return `1.${cleanCode}`; // 沪市
+        }
+        else if (code.startsWith('0') || code.startsWith('2') || code.startsWith('3')) {
+            return `0.${cleanCode}`; // 深市
+        }
+        else if (code.startsWith('4') || code.startsWith('8')) {
+            return `0.${cleanCode}`; // 北市，暂时用深市格式
+        }
+        else {
+            return `1.${cleanCode}`; // 默认沪市
+        }
+    }
     /**
      * 获取股票信息
      */
     async getStockInfo(codes) {
         try {
-            const stocks = [];
-            const errors = [];
-            for (const code of codes) {
-                try {
-                    const stockInfo = await this.getSingleStockInfo(code);
-                    if (stockInfo) {
-                        stocks.push(stockInfo);
-                    }
+            const eastmoneyCodes = codes.map(code => this.getEastMoneyCode(code)).join(',');
+            const url = `${this.baseUrl}?fltt=2&fields=f2,f3,f4,f12,f14&secids=${eastmoneyCodes}`;
+            const response = await fetch(url, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Referer': 'https://quote.eastmoney.com'
                 }
-                catch (error) {
-                    errors.push(`获取股票${code}信息失败: ${error instanceof Error ? error.message : '未知错误'}`);
-                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
+            const data = await response.json();
+            if (data.rc !== 0 || !data.data || !data.data.diff || data.data.diff.length === 0) {
+                return {
+                    success: false,
+                    data: [],
+                    errors: ['未找到股票数据'],
+                    source: DataSource.EASTMONEY
+                };
+            }
+            const stocks = data.data.diff.map((stock) => {
+                const price = parseFloat(stock.f2) || 0;
+                const changePercent = parseFloat(stock.f3) || 0;
+                const changeAmount = parseFloat(stock.f4) || 0;
+                return {
+                    code: stock.f12 || '',
+                    name: stock.f14 || '',
+                    price: price,
+                    change: changeAmount,
+                    changePercent: changePercent >= 0 ? `+${changePercent.toFixed(2)}%` : `${changePercent.toFixed(2)}%`,
+                    industry: '',
+                    volume: '0',
+                    amount: '0',
+                    market: this.getMarketFromCode(stock.f12 || ''),
+                    timestamp: Date.now()
+                };
+            });
             return {
                 success: stocks.length > 0,
                 data: stocks,
-                errors: errors.length > 0 ? errors : undefined,
                 source: DataSource.EASTMONEY
             };
         }
@@ -42,104 +82,30 @@ export class EastMoneyServiceSimple {
         }
     }
     /**
-     * 获取单个股票的东方财富网API数据
+     * 获取单个股票信息
      */
     async getSingleStockInfo(code) {
-        try {
-            // 调用东方财富网API获取股票信息
-            const url = `${this.dataBaseUrl}/api/data/v1/get`;
-            const params = new URLSearchParams({
-                'sortFields': '1',
-                'filter': `(SECURITY_CODE="${code}")`,
-                'pageNumber': '1',
-                'pageSize': '1',
-                'showFields': 'f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f14,f20,f21,f23,f24,f25,f26,f22,f33,f34,f35,f36,f37,f38,f39,f40,f41,f57,f58,f124,f125,f127,f128,f115,f152',
-                'source': 'WEB',
-                'client': 'WEB'
-            });
-            const response = await fetch(`${url}?${params.toString()}`, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Referer': 'https://quote.eastmoney.com'
-                }
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            const data = await response.json();
-            if (!data.result || !data.data || data.data.length === 0) {
-                throw new Error('未找到股票数据');
-            }
-            const stock = data.data[0];
-            const changeNum = parseFloat(stock.f43) || 0;
-            const changePercentNum = parseFloat(stock.f170) || 0;
-            return {
-                code: stock.f12 || code,
-                name: stock.f14 || '未知股票',
-                price: parseFloat(stock.f2) || 0,
-                change: changeNum,
-                changePercent: changePercentNum >= 0 ? `+${changePercentNum.toFixed(2)}%` : `${changePercentNum.toFixed(2)}%`,
-                industry: stock.f62 || '',
-                volume: stock.f5 || '0',
-                amount: stock.f6 || '0',
-                market: this.getMarketFromCode(code),
-                timestamp: Date.now()
-            };
+        const result = await this.getStockInfo([code]);
+        if (result.success && result.data.length > 0) {
+            return result.data[0];
         }
-        catch (error) {
-            console.error(`获取股票${code}详细信息失败:`, error);
-            return null;
-        }
+        return null;
     }
     /**
-     * 搜索股票
+     * 搜索股票（使用热门股票接口进行简单搜索）
      */
     async searchStock(keyword) {
         try {
-            // 调用东方财富网API搜索股票
-            const url = `${this.dataBaseUrl}/api/data/v1/get`;
-            const params = new URLSearchParams({
-                'sortFields': '1',
-                'filter': `(SECURITY_CODE_LIKE="%${keyword}%") OR SECURITY_NAME_ABBR_LIKE="%${keyword}%")`,
-                'pageNumber': '1',
-                'pageSize': '20',
-                'showFields': 'f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f14,f20,f21,f23,f24,f25,f26,f22,f33,f34,f35,f36,f37,f38,f39,f40,f41,f57,f58,f124,f125,f127,f128,f115,f152',
-                'source': 'WEB',
-                'client': 'WEB'
-            });
-            const response = await fetch(`${url}?${params.toString()}`, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Referer': 'https://quote.eastmoney.com'
-                }
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            // 获取一些热门股票，然后在客户端进行简单的关键词匹配
+            const result = await this.getPopularStocks();
+            if (!result.success) {
+                return result;
             }
-            const data = await response.json();
-            if (!data.result || !data.data || data.data.length === 0) {
-                return {
-                    success: false,
-                    data: [],
-                    errors: ['未找到相关股票'],
-                    source: DataSource.EASTMONEY
-                };
-            }
-            const stocks = data.data.map((stock) => ({
-                code: stock.f12 || '',
-                name: stock.f14 || '',
-                price: parseFloat(stock.f2) || 0,
-                change: parseFloat(stock.f43) || 0,
-                changePercent: stock.f170 || '',
-                industry: stock.f62 || '',
-                volume: stock.f5 || '0',
-                amount: stock.f6 || '0',
-                market: this.getMarketFromCode(stock.f12 || ''),
-                timestamp: Date.now()
-            }));
+            const filteredStocks = result.data.filter(stock => stock.name.includes(keyword) || stock.code.includes(keyword));
             return {
-                success: stocks.length > 0,
-                data: stocks,
+                success: filteredStocks.length > 0,
+                data: filteredStocks,
+                errors: filteredStocks.length === 0 ? ['未找到相关股票'] : undefined,
                 source: DataSource.EASTMONEY
             };
         }
@@ -153,65 +119,23 @@ export class EastMoneyServiceSimple {
         }
     }
     /**
-     * 获取热门股票
+     * 获取热门股票（使用一些知名股票代码）
      */
     async getPopularStocks() {
-        try {
-            // 调用东方财富网API获取热门股票
-            const url = `${this.dataBaseUrl}/api/data/v1/get`;
-            const params = new URLSearchParams({
-                'sortFields': '1,-1',
-                'sortRules': '[-1]',
-                'pageNumber': '1',
-                'pageSize': '50',
-                'showFields': 'f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f14,f20,f21,f23,f24,f25,f26,f22,f33,f34,f35,f36,f37,f38,f39,f40,f41,f57,f58,f124,f125,f127,f128,f115,f152',
-                'source': 'WEB',
-                'client': 'WEB'
-            });
-            const response = await fetch(`${url}?${params.toString()}`, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Referer': 'https://quote.eastmoney.com'
-                }
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            const data = await response.json();
-            if (!data.result || !data.data || data.data.length === 0) {
-                return {
-                    success: false,
-                    data: [],
-                    errors: ['未找到热门股票数据'],
-                    source: DataSource.EASTMONEY
-                };
-            }
-            const stocks = data.data.map((stock) => ({
-                code: stock.f12 || '',
-                name: stock.f14 || '',
-                price: parseFloat(stock.f2) || 0,
-                change: parseFloat(stock.f43) || 0,
-                changePercent: stock.f170 || '',
-                industry: stock.f62 || '',
-                volume: stock.f5 || '0',
-                amount: stock.f6 || '0',
-                market: this.getMarketFromCode(stock.f12 || ''),
-                timestamp: Date.now()
-            }));
-            return {
-                success: stocks.length > 0,
-                data: stocks,
-                source: DataSource.EASTMONEY
-            };
-        }
-        catch (error) {
-            return {
-                success: false,
-                data: [],
-                errors: [error instanceof Error ? error.message : '获取热门股票失败'],
-                source: DataSource.EASTMONEY
-            };
-        }
+        // 一些热门股票代码
+        const popularCodes = [
+            '000001', // 平安银行
+            '000002', // 万科A
+            '000858', // 五粮液
+            '002415', // 海康威视
+            '002460', // 赣锋锂业
+            '600000', // 浦发银行
+            '600036', // 招商银行
+            '600519', // 贵州茅台
+            '600644', // 乐山电力
+            '600887', // 伊利股份
+        ];
+        return await this.getStockInfo(popularCodes);
     }
     /**
      * 根据股票代码判断市场
@@ -231,45 +155,16 @@ export class EastMoneyServiceSimple {
         }
     }
     /**
-     * 占位方法，保持接口兼容性
+     * 验证股票代码格式
      */
-    async getCompanyInfo(stockCode, englishKey = false) {
-        return { message: '此功能将在后续版本中实现' };
+    validateStockCode(code) {
+        const cleanCode = code.replace(/^(sh|sz|bj)/i, '');
+        return /^[0-9]{6}$/.test(cleanCode);
     }
-    async getIncomeStatementList(stockCode, dateType = '年报', englishKey = false) {
-        return [];
-    }
-    async getBalanceSheetList(stockCode, dateType = '年报', englishKey = false) {
-        return [];
-    }
-    async getCashFlowStatementList(stockCode, dateType = '年报', englishKey = false) {
-        return [];
-    }
-    async getFinancialAnalysisList(stockCode, dateType = '年报', englishKey = false) {
-        return [];
-    }
-    async getStockNoticeList(stockCode, page = 1) {
-        return { success: false, data: [], errors: ['此功能将在后续版本中实现'], source: DataSource.EASTMONEY };
-    }
-    async getStockFundList(stockCode, englishKey = false) {
-        return [];
-    }
-    async getStockTradeList(stockCode, englishKey = false) {
-        return [];
-    }
-    async getStockEventList(stockCode, englishKey = false) {
-        return [];
-    }
-    async getStockSurvey(stockCode, englishKey = false) {
-        return {};
-    }
-    async getStockBrokerList(stockCode, englishKey = false) {
-        return [];
-    }
-    async getStockPledgeData(stockCode, englishKey = false) {
-        return {};
-    }
-    async getStockReportList(stockCode, englishKey = false) {
-        return [];
+    /**
+     * 标准化股票代码
+     */
+    normalizeStockCode(code) {
+        return code.replace(/^(sh|sz|bj)/i, '');
     }
 }
