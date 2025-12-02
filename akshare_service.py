@@ -22,7 +22,7 @@ try:
 except ImportError as e:
     print(json.dumps({
         "success": False,
-        "error": f"akshare库未安装，请先安装：pip install akshare\n错误详情：{str(e)}"
+        "error": f"akshare库未安装，请先安装：pip install akshare\\n错误详情：{str(e)}"
     }))
     sys.exit(1)
 
@@ -35,14 +35,19 @@ class AkshareService:
     def call_function(self, function_name: str, params: Dict[str, Any], original_args: Dict[str, Any] = None) -> Dict[str, Any]:
         """动态调用akshare函数"""
         try:
+            # 特殊处理 realtime_quote 函数，因为它在 akshare 中不存在
+            actual_function_name = function_name
+            if function_name == 'realtime_quote':
+                actual_function_name = 'stock_zh_a_spot_em'  # 映射到 A 股实时行情
+
             # 获取函数
-            if not hasattr(self.ak, function_name):
+            if not hasattr(self.ak, actual_function_name):
                 return {
                     "success": False,
-                    "error": f"函数 {function_name} 不存在"
+                    "error": f"函数 {function_name}（映射到 {actual_function_name}）不存在"
                 }
 
-            func = getattr(self.ak, function_name)
+            func = getattr(self.ak, actual_function_name)
 
             # 保存原始参数用于limit处理
             if original_args is None:
@@ -59,6 +64,8 @@ class AkshareService:
                 params = self._prepare_individual_spot_xq_params(params)
             elif function_name == 'stock_zh_a_minute':
                 params = self._prepare_minute_params(params)
+            elif function_name == 'realtime_quote':
+                params = self._prepare_realtime_quote_params(params)
             elif function_name in ['stock_sh_a_spot_em', 'stock_sz_a_spot_em',
                                  'stock_kc_a_spot_em', 'stock_zh_b_spot_em',
                                  'stock_zh_a_new_em', 'stock_zh_a_st_em', 'stock_zh_ah_spot_em',
@@ -104,7 +111,7 @@ class AkshareService:
                 }
 
         except Exception as e:
-            error_msg = f"调用函数失败: {str(e)}\n{traceback.format_exc()}"
+            error_msg = f"调用函数失败: {str(e)}\\n{traceback.format_exc()}"
             print(f"[Python Error] {error_msg}", file=sys.stderr)
             return {
                 "success": False,
@@ -172,6 +179,12 @@ class AkshareService:
 
         return clean_params
 
+    def _prepare_realtime_quote_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        """准备实时行情参数"""
+        # realtime_quote 函数在 akshare 中不存在，映射到 stock_zh_a_spot_em
+        # 该函数不需要参数，会返回所有 A 股实时行情
+        return {}
+
 def main():
     """主函数"""
     try:
@@ -223,7 +236,7 @@ def main():
     except Exception as e:
         print(json.dumps({
             "success": False,
-            "error": f"服务执行失败: {str(e)}\n{traceback.format_exc()}"
+            "error": f"服务执行失败: {str(e)}\\n{traceback.format_exc()}"
         }))
 
 if __name__ == "__main__":
