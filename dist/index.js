@@ -139,16 +139,31 @@ class AkshareMCPServer {
                     required: ["symbol"],
                 },
             },
-            // 个股信息查询
+            // 个股信息查询 - 雪球版本
             {
                 name: "stock_individual_basic_info_xq",
-                description: "查询个股基本信息",
+                description: "查询个股基本信息（雪球数据源）- 可能因网络限制无法获取数据",
                 inputSchema: {
                     type: "object",
                     properties: {
                         symbol: {
                             type: "string",
                             description: "股票代码，例如：600246",
+                        },
+                    },
+                    required: ["symbol"],
+                },
+            },
+            // 个股信息查询 - 东方财富版本（推荐）
+            {
+                name: "stock_individual_info_em",
+                description: "查询个股基本信息（东方财富数据源，更稳定）",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        symbol: {
+                            type: "string",
+                            description: "股票代码，例如：000001, 600000",
                         },
                     },
                     required: ["symbol"],
@@ -420,10 +435,10 @@ class AkshareService:
             # 特殊处理某些函数的参数
             if function_name == 'stock_zh_a_hist':
                 params = self._prepare_hist_params(params)
-            elif function_name == 'stock_individual_info_em':
-                params = self._prepare_individual_info_params(params)
             elif function_name == 'stock_individual_basic_info_xq':
                 params = self._prepare_individual_basic_info_params(params)
+            elif function_name == 'stock_individual_info_em':
+                params = self._prepare_individual_info_em_params(params)
             elif function_name == 'stock_individual_spot_xq':
                 params = self._prepare_individual_spot_xq_params(params)
             elif function_name == 'stock_zh_a_minute':
@@ -449,6 +464,16 @@ class AkshareService:
                     data = result.head(limit).to_dict('records')
                 else:
                     data = result.to_dict('records')
+
+                # 特殊处理雪球数据源的空结果
+                if function_name.endswith('_xq') and (not data or all(not row.get('value') for row in data if 'value' in row)):
+                    return {
+                        "success": True,
+                        "data": data,
+                        "count": len(data),
+                        "columns": list(result.columns),
+                        "warning": "雪球数据源可能因网络限制无法获取有效数据，建议使用 stock_individual_info_em 替代"
+                    }
 
                 return {
                     "success": True,
@@ -504,6 +529,12 @@ class AkshareService:
         """准备个股信息查询参数"""
         symbol = params.get('symbol', '')
         # akshare的stock_individual_info_em只需要symbol参数
+        return {'symbol': symbol}
+
+    def _prepare_individual_info_em_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        """准备东方财富个股信息查询参数"""
+        symbol = params.get('symbol', '')
+        # 东方财富的stock_individual_info_em只需要symbol参数
         return {'symbol': symbol}
 
     def _prepare_individual_basic_info_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
