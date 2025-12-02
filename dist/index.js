@@ -44,21 +44,6 @@ class AkshareMCPServer {
     }
     getToolDefinitions() {
         return [
-            // A股实时行情工具
-            {
-                name: 'stock_zh_a_spot_em',
-                description: '获取沪深京A股实时行情数据',
-                inputSchema: {
-                    type: 'object',
-                    properties: {
-                        limit: {
-                            type: 'number',
-                            description: '返回数据条数限制，默认为100条',
-                            default: 100
-                        }
-                    }
-                }
-            },
             // 沪A股实时行情
             {
                 name: 'stock_sh_a_spot_em',
@@ -78,51 +63,6 @@ class AkshareMCPServer {
             {
                 name: 'stock_sz_a_spot_em',
                 description: '获取深A股实时行情数据',
-                inputSchema: {
-                    type: 'object',
-                    properties: {
-                        limit: {
-                            type: 'number',
-                            description: '返回数据条数限制，默认为100条',
-                            default: 100
-                        }
-                    }
-                }
-            },
-            // 创业板实时行情
-            {
-                name: 'stock_cy_a_spot_em',
-                description: '获取创业板实时行情数据',
-                inputSchema: {
-                    type: 'object',
-                    properties: {
-                        limit: {
-                            type: 'number',
-                            description: '返回数据条数限制，默认为100条',
-                            default: 100
-                        }
-                    }
-                }
-            },
-            // 科创板实时行情
-            {
-                name: 'stock_kc_a_spot_em',
-                description: '获取科创板实时行情数据',
-                inputSchema: {
-                    type: 'object',
-                    properties: {
-                        limit: {
-                            type: 'number',
-                            description: '返回数据条数限制，默认为100条',
-                            default: 100
-                        }
-                    }
-                }
-            },
-            // B股实时行情
-            {
-                name: 'stock_zh_b_spot_em',
-                description: '获取B股实时行情数据',
                 inputSchema: {
                     type: 'object',
                     properties: {
@@ -173,7 +113,7 @@ class AkshareMCPServer {
                     properties: {
                         symbol: {
                             type: 'string',
-                            description: '股票代码，例如：000001'
+                            description: '股票代码，例如：600246'
                         },
                         period: {
                             type: 'string',
@@ -201,14 +141,14 @@ class AkshareMCPServer {
             },
             // 个股信息查询
             {
-                name: 'stock_individual_info_em',
+                name: 'stock_individual_basic_info_xq',
                 description: '查询个股基本信息',
                 inputSchema: {
                     type: 'object',
                     properties: {
                         symbol: {
                             type: 'string',
-                            description: '股票代码，例如：000001'
+                            description: '股票代码，例如：600246'
                         }
                     },
                     required: ['symbol']
@@ -241,51 +181,6 @@ class AkshareMCPServer {
                     required: ['symbol']
                 }
             },
-            // A+H股比价
-            {
-                name: 'stock_zh_ah_spot_em',
-                description: '获取A+H股比价数据',
-                inputSchema: {
-                    type: 'object',
-                    properties: {
-                        limit: {
-                            type: 'number',
-                            description: '返回数据条数限制，默认为50条',
-                            default: 50
-                        }
-                    }
-                }
-            },
-            // 美股实时行情
-            {
-                name: 'stock_us_spot_em',
-                description: '获取美股实时行情数据',
-                inputSchema: {
-                    type: 'object',
-                    properties: {
-                        limit: {
-                            type: 'number',
-                            description: '返回数据条数限制，默认为100条',
-                            default: 100
-                        }
-                    }
-                }
-            },
-            // 同行比较
-            {
-                name: 'stock_zh_valuation_comparison_em',
-                description: '获取同行估值比较数据',
-                inputSchema: {
-                    type: 'object',
-                    properties: {
-                        symbol: {
-                            type: 'string',
-                            description: '股票代码，例如：SZ000895'
-                        }
-                    },
-                    required: ['symbol']
-                }
-            },
             // 股市日历
             {
                 name: 'stock_gsrl_gsdt_em',
@@ -299,6 +194,81 @@ class AkshareMCPServer {
                         }
                     },
                     required: ['date']
+                }
+            },
+            // 个股实时行情雪球版
+            {
+                name: 'stock_individual_spot_xq',
+                description: '获取个股实时行情数据（雪球）',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        symbol: {
+                            type: 'string',
+                            description: '股票代码，例如：SZ600246、SH600000'
+                        }
+                    },
+                    required: ['symbol']
+                }
+            },
+            // 实时行情
+            {
+                name: 'realtime_quote',
+                description: '获取实时行情数据',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        symbol: {
+                            type: 'string',
+                            description: '股票代码，支持多只股票，用逗号分隔，例如：600246,600000,000002'
+                        }
+                    },
+                    required: ['symbol']
+                }
+            },
+            // 全球实时行情
+            {
+                name: 'stock_global_realtime',
+                description: '获取全球股市实时行情数据',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        region: {
+                            type: 'string',
+                            description: '地区：中国大陆、香港、美国、欧洲等',
+                            enum: ['中国', '香港', '美国', '欧洲', '亚洲', '全球'],
+                            default: '全球'
+                        }
+                    }
+                }
+            },
+            // 港股实时行情
+            {
+                name: 'stock_hk_spot_em',
+                description: '获取港股实时行情数据',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        limit: {
+                            type: 'number',
+                            description: '返回数据条数限制，默认为100条',
+                            default: 100
+                        }
+                    }
+                }
+            },
+            // 美股实时行情
+            {
+                name: 'stock_us_spot',
+                description: '获取美股实时行情数据（新浪）',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        symbol: {
+                            type: 'string',
+                            description: '股票代码，支持多只股票，用逗号分隔，例如：AAPL,MSFT,GOOGL'
+                        }
+                    }
                 }
             }
         ];
@@ -358,7 +328,7 @@ class AkshareMCPServer {
                 console.error('[Python Error]', err);
                 reject(new Error(`Python服务调用失败: ${err.message}`));
             });
-            pyshell.on('close', (code) => {
+            pyshell.on('close', (_code) => {
                 try {
                     if (result) {
                         if (result.success) {

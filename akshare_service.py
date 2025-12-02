@@ -53,10 +53,14 @@ class AkshareService:
                 params = self._prepare_hist_params(params)
             elif function_name == 'stock_individual_info_em':
                 params = self._prepare_individual_info_params(params)
+            elif function_name == 'stock_individual_basic_info_xq':
+                params = self._prepare_individual_basic_info_params(params)
+            elif function_name == 'stock_individual_spot_xq':
+                params = self._prepare_individual_spot_xq_params(params)
             elif function_name == 'stock_zh_a_minute':
                 params = self._prepare_minute_params(params)
-            elif function_name in ['stock_zh_a_spot_em', 'stock_sh_a_spot_em', 'stock_sz_a_spot_em',
-                                 'stock_cy_a_spot_em', 'stock_kc_a_spot_em', 'stock_zh_b_spot_em',
+            elif function_name in ['stock_sh_a_spot_em', 'stock_sz_a_spot_em',
+                                 'stock_kc_a_spot_em', 'stock_zh_b_spot_em',
                                  'stock_zh_a_new_em', 'stock_zh_a_st_em', 'stock_zh_ah_spot_em',
                                  'stock_us_spot_em']:
                 # 这些函数通常不需要参数，移除limit等非标准参数
@@ -129,6 +133,30 @@ class AkshareService:
         """准备个股信息查询参数"""
         symbol = params.get('symbol', '')
         # akshare的stock_individual_info_em只需要symbol参数
+        return {'symbol': symbol}
+
+    def _prepare_individual_basic_info_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        """准备个股基本信息查询参数（雪球）"""
+        symbol = params.get('symbol', '')
+        # 雪球股票代码格式需要加上SH/SZ前缀
+        if symbol and not symbol.startswith(('SH', 'SZ')):
+            if symbol.startswith('6'):  # 上海证券交易所
+                symbol = f'SH{symbol}'
+            elif symbol.startswith(('0', '3')):  # 深圳证券交易所
+                symbol = f'SZ{symbol}'
+
+        return {'symbol': symbol}
+
+    def _prepare_individual_spot_xq_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        """准备个股实时行情查询参数（雪球）"""
+        symbol = params.get('symbol', '')
+        # 雪球股票代码格式需要加上SH/SZ前缀
+        if symbol and not symbol.startswith(('SH', 'SZ')):
+            if symbol.startswith('6'):  # 上海证券交易所
+                symbol = f'SH{symbol}'
+            elif symbol.startswith(('0', '3')):  # 深圳证券交易所
+                symbol = f'SZ{symbol}'
+
         return {'symbol': symbol}
 
     def _prepare_minute_params(self, params: Dict[str, Any]) -> Dict[str, Any]:

@@ -78,14 +78,10 @@ const toolsCount = (indexContent.match(/name: '/g) || []).length;
 console.log(`  ✅ 工具数量: ${toolsCount}`);
 
 const toolNames = [
-  'stock_zh_a_spot_em',
   'stock_sh_a_spot_em',
   'stock_sz_a_spot_em',
-  'stock_cy_a_spot_em',
-  'stock_kc_a_spot_em',
-  'stock_zh_b_spot_em',
   'stock_zh_a_hist',
-  'stock_individual_info_em'
+  'stock_individual_basic_info_xq'
 ];
 
 toolNames.forEach(tool => {
@@ -111,7 +107,7 @@ if (readmeExists) {
 
 // 8. 总结
 console.log('\n🎯 验证总结:');
-if (allFilesExists && distExists && indexJsExists && pythonServiceExists) {
+if (allFilesExist && distExists && indexJsExists && pythonServiceExists) {
   console.log('  ✅ 项目结构完整');
   console.log('  ✅ 构建输出正常');
   console.log('  ✅ 核心文件存在');
