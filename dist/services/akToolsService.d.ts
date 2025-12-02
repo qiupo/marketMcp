@@ -17,6 +17,7 @@ export declare class AKToolsService {
     checkService(): Promise<boolean>;
     /**
      * 获取股票实时行情数据
+     * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
      */
     getStockRealtime(codes: string[]): Promise<StockQueryResult>;
     /**
@@ -29,6 +30,7 @@ export declare class AKToolsService {
     getStockBasicInfo(codes: string[]): Promise<StockQueryResult>;
     /**
      * 获取市场概览
+     * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
      */
     getMarketOverview(options?: {
         market?: string;

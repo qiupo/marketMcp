@@ -27,7 +27,9 @@ class AKToolsService {
             return false;
         }
         try {
-            const response = await axios_1.default.get(`${this.baseUrl}stock_zh_a_spot_em`, {
+            // 使用 stock_individual_info_em 接口来检测服务可用性
+            const response = await axios_1.default.get(`${this.baseUrl}stock_individual_info_em`, {
+                params: { symbol: '000001' }, // 使用平安银行作为测试
                 headers: {
                     'User-Agent': 'MarketMCP-Client/3.0.0'
                 },
@@ -41,72 +43,15 @@ class AKToolsService {
     }
     /**
      * 获取股票实时行情数据
+     * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
      */
     async getStockRealtime(codes) {
-        if (!this.enabled) {
-            return {
-                success: false,
-                data: [],
-                errors: ['AKTools服务未启用或不可用'],
-                source: types_1.DataSource.AKTOOLS
-            };
-        }
-        try {
-            const symbol = codes.join(',');
-            const response = await axios_1.default.get(`${this.baseUrl}stock_zh_a_spot_em`, {
-                params: { symbol },
-                headers: {
-                    'User-Agent': 'MarketMCP-Client/3.0.0'
-                },
-                timeout: this.timeout
-            });
-            if (!response.data || !Array.isArray(response.data)) {
-                return {
-                    success: false,
-                    data: [],
-                    errors: ['AKTools API返回数据格式错误'],
-                    source: types_1.DataSource.AKTOOLS
-                };
-            }
-            const stocks = response.data.map((stock) => {
-                const price = parseFloat(stock['最新价']) || 0;
-                const change = parseFloat(stock['涨跌额']) || 0;
-                const changePercent = parseFloat(stock['涨跌幅']) || 0;
-                return {
-                    code: stock['代码'] || '',
-                    name: stock['名称'] || '',
-                    price: price,
-                    change: change,
-                    changePercent: changePercent >= 0 ? `+${changePercent.toFixed(2)}%` : `${changePercent.toFixed(2)}%`,
-                    volume: this.formatVolume(stock['成交量'] || 0),
-                    amount: this.formatAmount(stock['成交额'] || 0),
-                    open: parseFloat(stock['今开']) || 0,
-                    high: parseFloat(stock['最高']) || 0,
-                    low: parseFloat(stock['最低']) || 0,
-                    prevClose: parseFloat(stock['昨收']) || 0,
-                    turnoverRate: stock['换手率'] ? `${stock['换手率']}` : '',
-                    peRatio: stock['市盈率-动态'] ? `${stock['市盈率-动态']}` : '',
-                    pbRatio: stock['市净率'] ? `${stock['市净率']}` : '',
-                    totalMarketValue: stock['总市值'] ? this.formatAmount(parseFloat(stock['总市值'])) : '',
-                    circulatingMarketValue: stock['流通市值'] ? this.formatAmount(parseFloat(stock['流通市值'])) : '',
-                    market: this.getMarketFromCode(stock['代码'] || ''),
-                    timestamp: Date.now()
-                };
-            });
-            return {
-                success: stocks.length > 0,
-                data: stocks,
-                source: types_1.DataSource.AKTOOLS
-            };
-        }
-        catch (error) {
-            return {
-                success: false,
-                data: [],
-                errors: [error instanceof Error ? error.message : 'AKTools API调用失败'],
-                source: types_1.DataSource.AKTOOLS
-            };
-        }
+        return {
+            success: false,
+            data: [],
+            errors: ['实时行情接口 stock_zh_a_spot_em 暂时无法使用，请使用其他数据源'],
+            source: types_1.DataSource.AKTOOLS
+        };
     }
     /**
      * 获取股票历史数据
@@ -276,67 +221,14 @@ class AKToolsService {
     }
     /**
      * 获取市场概览
+     * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
      */
     async getMarketOverview(options = {}) {
-        if (!this.enabled) {
-            return {
-                success: false,
-                error: 'AKTools服务未启用或不可用',
-                source: types_1.DataSource.AKTOOLS
-            };
-        }
-        try {
-            const response = await axios_1.default.get(`${this.baseUrl}stock_zh_a_spot_em`, {
-                headers: {
-                    'User-Agent': 'MarketMCP-Client/3.0.0'
-                },
-                timeout: this.timeout
-            });
-            if (!response.data || !Array.isArray(response.data)) {
-                return {
-                    success: false,
-                    error: 'AKTools API返回数据格式错误',
-                    source: types_1.DataSource.AKTOOLS
-                };
-            }
-            const stocks = response.data || [];
-            const sectorStats = {};
-            let totalAmount = 0;
-            for (const stock of stocks) {
-                totalAmount += parseFloat(stock['成交额']) || 0;
-                // 这里可以添加更详细的行业分类逻辑
-                const industry = stock['行业'] || '其他';
-                if (!sectorStats[industry]) {
-                    sectorStats[industry] = { count: 0, totalAmount: 0, avgChange: 0 };
-                }
-                sectorStats[industry].count++;
-                sectorStats[industry].totalAmount += parseFloat(stock['成交额']) || 0;
-                sectorStats[industry].avgChange += parseFloat(stock['涨跌幅']) || 0;
-            }
-            // 计算平均涨跌幅
-            Object.values(sectorStats).forEach(stats => {
-                if (stats.count > 0) {
-                    stats.avgChange = stats.avgChange / stats.count;
-                }
-            });
-            return {
-                success: true,
-                data: {
-                    totalCount: stocks.length,
-                    totalAmount,
-                    sectorStats,
-                    updateTime: new Date().toLocaleString('zh-CN')
-                },
-                source: types_1.DataSource.AKTOOLS
-            };
-        }
-        catch (error) {
-            return {
-                success: false,
-                error: error instanceof Error ? error.message : '市场概览获取失败',
-                source: types_1.DataSource.AKTOOLS
-            };
-        }
+        return {
+            success: false,
+            error: '市场概览接口 stock_zh_a_spot_em 暂时无法使用，请使用其他数据源',
+            source: types_1.DataSource.AKTOOLS
+        };
     }
     /**
      * 根据股票代码判断市场

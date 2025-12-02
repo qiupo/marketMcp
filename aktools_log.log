@@ -3,3 +3,41 @@
 2025-12-02 11:23:48,578 - AKToolsLog - INFO - 这是一个信息级别的日志消息
 2025-12-02 11:25:09,081 - AKToolsLog - INFO - 这是一个信息级别的日志消息
 2025-12-02 11:29:01,685 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 11:32:45,904 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 11:33:22,428 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 11:33:57,505 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 11:34:04,949 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 11:34:14,192 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 11:34:41,510 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:23:04,997 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:36:21,429 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:38:00,418 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:38:42,741 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:38:54,086 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:39:05,110 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:39:35,301 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:40:14,800 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:40:26,145 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:40:54,461 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:41:11,369 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:41:50,631 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:43:07,646 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:44:53,941 - AKToolsLog - INFO - 获取到 stock_zh_a_hist 的数据
+2025-12-02 12:46:06,196 - AKToolsLog - INFO - 未找到该接口，请升级 AKShare 到最新版本并在文档中确认该接口的使用方式：https://akshare.akfamily.xyz
+2025-12-02 12:47:06,221 - AKToolsLog - INFO - 获取到 stock_zh_b_daily 的数据
+2025-12-02 12:54:16,404 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:55:54,846 - AKToolsLog - INFO - 获取到 stock_zh_a_hist 的数据
+2025-12-02 12:57:19,326 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:57:50,619 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:58:19,815 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:58:57,084 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 12:59:37,873 - AKToolsLog - INFO - 这是一个信息级别的日志消息
+2025-12-02 13:01:18,805 - AKToolsLog - INFO - 请输入正确的参数错误 'data'，请升级 AKShare 到最新版本并在文档中确认该接口的使用方式：https://akshare.akfamily.xyz
+2025-12-02 13:01:39,564 - AKToolsLog - INFO - 未找到该接口，请升级 AKShare 到最新版本并在文档中确认该接口的使用方式：https://akshare.akfamily.xyz
+2025-12-02 13:03:26,000 - AKToolsLog - INFO - 获取到 stock_zh_a_hist 的数据
+2025-12-02 13:03:38,852 - AKToolsLog - INFO - 获取到 stock_zh_a_hist 的数据
+2025-12-02 13:08:37,175 - AKToolsLog - INFO - 获取到 stock_individual_info_em 的数据
+2025-12-02 13:08:44,156 - AKToolsLog - INFO - 获取到 stock_individual_info_em 的数据
+2025-12-02 13:08:44,612 - AKToolsLog - INFO - 获取到 stock_individual_info_em 的数据
+2025-12-02 13:10:03,486 - AKToolsLog - INFO - 请输入正确的参数错误 'data'，请升级 AKShare 到最新版本并在文档中确认该接口的使用方式：https://akshare.akfamily.xyz
+2025-12-02 13:10:23,209 - AKToolsLog - INFO - 请输入正确的参数错误 'data'，请升级 AKShare 到最新版本并在文档中确认该接口的使用方式：https://akshare.akfamily.xyz

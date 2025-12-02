@@ -29,6 +29,7 @@ export declare class StockService {
     getStockBasicInfo(codes: string[]): Promise<StockQueryResult>;
     /**
      * 获取行业板块数据
+     * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
      */
     getSectorData(sector?: string): Promise<any>;
     /**
@@ -37,6 +38,7 @@ export declare class StockService {
     checkAKToolsService(): Promise<boolean>;
     /**
      * 获取市场概览
+     * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
      */
     getMarketOverview(market?: string): Promise<any>;
 }

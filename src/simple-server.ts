@@ -333,38 +333,8 @@ class SimpleMarketMCPServer {
   }
 
   private async getAKToolsStockData(codes: string[]): Promise<any[]> {
-    try {
-      const axios = (await import('axios')).default;
-      const symbol = codes.join(',');
-
-      const response = await axios.get(`http://127.0.0.1:8080/api/public/stock_zh_a_spot_em`, {
-        params: { symbol },
-        timeout: 10000,
-        headers: {
-          'User-Agent': 'MarketMCP-Client/3.0.0'
-        }
-      });
-
-      if (!response.data || !Array.isArray(response.data)) {
-        throw new Error('AKTools API返回数据格式错误');
-      }
-
-      return response.data.map((stock: any) => ({
-        code: stock['代码'] || '',
-        name: stock['名称'] || '',
-        price: parseFloat(stock['最新价']) || 0,
-        change: parseFloat(stock['涨跌额']) || 0,
-        changePercent: stock['涨跌幅'] ? `${stock['涨跌幅']}%` : '0.00%',
-        volume: stock['成交量'] || '0',
-        amount: stock['成交额'] || '0',
-        market: this.getMarketFromCode(stock['代码'] || ''),
-        timestamp: Date.now()
-      }));
-
-    } catch (error) {
-      console.error('AKTools数据获取失败:', error);
-      throw error;
-    }
+    // 由于 stock_zh_a_spot_em 接口无法使用，抛出错误提示用户使用其他数据源
+    throw new Error('AKTools实时行情接口 stock_zh_a_spot_em 暂时无法使用，请使用东方财富或其他数据源');
   }
 
   private getMockStockData(codes: string[]): any[] {
@@ -439,12 +409,13 @@ class SimpleMarketMCPServer {
       if (isInstalled) {
         console.log('✅ AKTools已安装');
 
-        // 尝试自动启动AKTools
-        const started = await this.akToolsManager.start();
-        if (started) {
-          console.log('✅ AKTools服务启动成功');
+        // 检查AKTools是否已经在运行
+        const isRunning = await this.akToolsManager.checkServiceStatus();
+        if (isRunning) {
+          console.log('✅ 检测到AKTools服务已在运行，将连接到现有服务');
         } else {
-          console.log('⚠️  AKTools服务启动失败，将使用模拟数据');
+          console.log('ℹ️  AKTools未运行，将使用模拟数据');
+          console.log('💡 要启动AKTools服务，请运行: python -m aktools');
         }
       } else {
         console.log('⚠️  AKTools未安装，将使用模拟数据');

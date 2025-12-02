@@ -93,7 +93,7 @@ npm run build
   "mcpServers": {
     "market-mcp": {
       "command": "node",
-      "args": ["/path/to/marketMcp/dist/simple-server.js"]
+      "args": ["/path/to/marketMcp/dist/index.js"]
     }
   }
 }

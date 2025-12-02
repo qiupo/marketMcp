@@ -1,5 +1,5 @@
 import { EastMoneyServiceSimple } from './eastmoney-service-simple.js';
-import { AKToolsService } from './aktools-service.js';
+import { AKToolsService } from './akToolsService.js';
 import { StockInfo, StockQueryParams, StockQueryResult, DataSource } from '../types/stock.js';
 
 /**
@@ -98,9 +98,14 @@ export class StockService {
 
   /**
    * 获取行业板块数据
+   * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
    */
   async getSectorData(sector?: string): Promise<any> {
-    return this.aktoolsService.getSectorData(sector);
+    return {
+      success: false,
+      error: '行业板块数据接口暂时无法使用，请使用其他数据源',
+      source: 'aktools'
+    };
   }
 
   /**
@@ -112,30 +117,15 @@ export class StockService {
 
   /**
    * 获取市场概览
+   * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
    */
   async getMarketOverview(market: string = 'all'): Promise<any> {
-    try {
-      const sectorData = await this.aktoolsService.getSectorData();
-      if (sectorData.success) {
-        return {
-          success: true,
-          market,
-          totalCount: sectorData.data.totalCount,
-          totalAmount: sectorData.data.totalAmount,
-          sectorStats: sectorData.data.sectorStats,
-          updateTime: sectorData.data.updateTime
-        };
-      }
-      return {
-        success: false,
-        error: '无法获取市场数据'
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : '未知错误'
-      };
-    }
+    return {
+      success: false,
+      error: '市场概览接口暂时无法使用，请使用其他数据源',
+      market,
+      source: 'aktools'
+    };
   }
 
-  }
+}

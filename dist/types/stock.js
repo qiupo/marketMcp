@@ -6,6 +6,7 @@ var DataSource;
 (function (DataSource) {
     DataSource["IPO3"] = "ipo3";
     DataSource["EASTMONEY"] = "eastmoney";
-    DataSource["AKTOOLS"] = "aktools"; // AKTools HTTP API
+    DataSource["AKTOOLS"] = "aktools";
+    DataSource["AUTO"] = "auto"; // 自动选择
 })(DataSource || (exports.DataSource = DataSource = {}));
 //# sourceMappingURL=stock.js.map

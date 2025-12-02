@@ -20,6 +20,13 @@ export interface StockInfo {
     market: string;
     timestamp: number;
 }
+export interface CompanyBasicInfo {
+    code: string;
+    name: string;
+    price: number;
+    market: string;
+    industry?: string;
+}
 export interface CompanyInfo {
     name: string;
     code: string;
@@ -96,7 +103,8 @@ export interface IPO3Response {
 export declare enum DataSource {
     IPO3 = "ipo3",// IPO3.com（已废弃）
     EASTMONEY = "eastmoney",// 东方财富网（推荐）
-    AKTOOLS = "aktools"
+    AKTOOLS = "aktools",// AKTools HTTP API
+    AUTO = "auto"
 }
 export type DataSourceType = DataSource.IPO3 | DataSource.EASTMONEY | DataSource.AKTOOLS | 'auto';
 export interface StockQueryParams {
@@ -107,6 +115,47 @@ export interface GetStockInfoParams {
     codes: string | string[];
     market?: string;
     data_source?: string;
+}
+export interface GetStockHistoryParams {
+    codes: string | string[];
+    period?: string;
+    start_date?: string;
+    end_date?: string;
+    adjust?: string;
+    data_source?: DataSource;
+}
+export interface GetStockBasicParams {
+    codes: string | string[];
+    data_source?: DataSource;
+}
+export interface GetMarketOverviewParams {
+    market?: string;
+    sector?: string;
+    data_source?: DataSource;
+}
+export interface StockHistoryData {
+    date: string;
+    open: number;
+    close: number;
+    high: number;
+    low: number;
+    volume: number;
+    amount: number;
+    amplitude?: number;
+    changePercent?: number;
+    changeAmount?: number;
+    turnoverRate?: number;
+}
+export interface MarketOverview {
+    totalCount: number;
+    totalAmount: number;
+    sectorStats: Record<string, SectorStats>;
+    updateTime: string;
+}
+export interface SectorStats {
+    count: number;
+    totalAmount: number;
+    avgChange?: number;
 }
 export interface FinancialData {
     [key: string]: string | number;

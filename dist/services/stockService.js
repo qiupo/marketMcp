@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StockService = void 0;
 const eastmoney_service_simple_js_1 = require("./eastmoney-service-simple.js");
-const aktools_service_js_1 = require("./aktools-service.js");
+const akToolsService_js_1 = require("./akToolsService.js");
 const stock_js_1 = require("../types/stock.js");
 /**
  * 股票服务管理器
@@ -11,7 +11,7 @@ const stock_js_1 = require("../types/stock.js");
 class StockService {
     constructor() {
         this.eastMoneyService = new eastmoney_service_simple_js_1.EastMoneyServiceSimple();
-        this.aktoolsService = new aktools_service_js_1.AKToolsService();
+        this.aktoolsService = new akToolsService_js_1.AKToolsService();
     }
     /**
      * 获取股票信息
@@ -84,9 +84,14 @@ class StockService {
     }
     /**
      * 获取行业板块数据
+     * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
      */
     async getSectorData(sector) {
-        return this.aktoolsService.getSectorData(sector);
+        return {
+            success: false,
+            error: '行业板块数据接口暂时无法使用，请使用其他数据源',
+            source: 'aktools'
+        };
     }
     /**
      * 检查AKTools服务状态
@@ -96,31 +101,15 @@ class StockService {
     }
     /**
      * 获取市场概览
+     * 注意：由于 stock_zh_a_spot_em 接口无法使用，此方法暂时禁用
      */
     async getMarketOverview(market = 'all') {
-        try {
-            const sectorData = await this.aktoolsService.getSectorData();
-            if (sectorData.success) {
-                return {
-                    success: true,
-                    market,
-                    totalCount: sectorData.data.totalCount,
-                    totalAmount: sectorData.data.totalAmount,
-                    sectorStats: sectorData.data.sectorStats,
-                    updateTime: sectorData.data.updateTime
-                };
-            }
-            return {
-                success: false,
-                error: '无法获取市场数据'
-            };
-        }
-        catch (error) {
-            return {
-                success: false,
-                error: error instanceof Error ? error.message : '未知错误'
-            };
-        }
+        return {
+            success: false,
+            error: '市场概览接口暂时无法使用，请使用其他数据源',
+            market,
+            source: 'aktools'
+        };
     }
 }
 exports.StockService = StockService;

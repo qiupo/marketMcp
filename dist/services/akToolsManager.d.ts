@@ -18,6 +18,10 @@ export declare class AKToolsManager {
     private readonly retryDelay;
     constructor(port?: number);
     /**
+     * 检测AKTools服务正在运行的实际端口
+     */
+    private detectAKToolsPort;
+    /**
      * 检查AKTools是否已安装
      */
     checkInstallation(): Promise<boolean>;
@@ -49,7 +53,7 @@ export declare class AKToolsManager {
      * 获取服务健康信息
      */
     getHealthInfo(): Promise<{
-        status: 'running' | 'stopped' | 'unknown';
+        status: "running" | "stopped" | "unknown";
         uptime?: number;
         pid?: number;
         port: number;
