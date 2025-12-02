@@ -5,8 +5,12 @@
  * 测试akshare MCP服务器的各项功能
  */
 
-const { spawn } = require('child_process');
-const path = require('path');
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class MCPTester {
   constructor() {
@@ -235,9 +239,9 @@ class MCPTester {
 }
 
 // 运行测试
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const tester = new MCPTester();
   tester.runTests().catch(console.error);
 }
 
-module.exports = MCPTester;
+export default MCPTester;
