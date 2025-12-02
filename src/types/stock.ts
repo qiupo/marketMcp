@@ -110,8 +110,12 @@ export interface IPO3Response {
 // API数据源
 export enum DataSource {
   IPO3 = 'ipo3',           // IPO3.com（已废弃）
-  EASTMONEY = 'eastmoney'   // 东方财富网（推荐）
+  EASTMONEY = 'eastmoney', // 东方财富网（推荐）
+  AKTOOLS = 'aktools'      // AKTools HTTP API
 }
+
+// 数据源类型联合，兼容字符串字面量
+export type DataSourceType = DataSource.IPO3 | DataSource.EASTMONEY | DataSource.AKTOOLS | 'auto';
 
 // 查询参数
 export interface StockQueryParams {

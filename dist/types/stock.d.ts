@@ -95,8 +95,10 @@ export interface IPO3Response {
 }
 export declare enum DataSource {
     IPO3 = "ipo3",// IPO3.com（已废弃）
-    EASTMONEY = "eastmoney"
+    EASTMONEY = "eastmoney",// 东方财富网（推荐）
+    AKTOOLS = "aktools"
 }
+export type DataSourceType = DataSource.IPO3 | DataSource.EASTMONEY | DataSource.AKTOOLS | 'auto';
 export interface StockQueryParams {
     codes: string[];
     dataSource?: DataSource;
@@ -276,3 +278,4 @@ export interface StockQueryResult {
     errors?: string[];
     source: DataSource;
 }
+//# sourceMappingURL=stock.d.ts.map

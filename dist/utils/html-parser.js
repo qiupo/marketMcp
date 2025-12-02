@@ -1,9 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HtmlParser = void 0;
+exports.createHtmlParser = createHtmlParser;
 /**
  * HTML解析工具类
  * 使用正则表达式解析HTML内容，提供轻量级解析能力
  */
-export class HtmlParser {
-    html;
+class HtmlParser {
     constructor(html) {
         this.html = html;
     }
@@ -191,9 +194,11 @@ export class HtmlParser {
             .trim();
     }
 }
+exports.HtmlParser = HtmlParser;
 /**
  * 创建HTML解析器实例
  */
-export function createHtmlParser(html) {
+function createHtmlParser(html) {
     return new HtmlParser(html);
 }
+//# sourceMappingURL=html-parser.js.map

@@ -1,10 +1,15 @@
-import { DataSource } from '../types/stock.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EastMoneyServiceSimple = void 0;
+const stock_js_1 = require("../types/stock.js");
 /**
  * 东方财富网数据服务类
  * 提供完整的股票数据查询功能
  */
-export class EastMoneyServiceSimple {
-    baseUrl = 'https://push2.eastmoney.com/api/qt/ulist.np/get';
+class EastMoneyServiceSimple {
+    constructor() {
+        this.baseUrl = 'https://push2.eastmoney.com/api/qt/ulist.np/get';
+    }
     /**
      * 根据股票代码获取东方财富代码格式
      * 东方财富的格式：0.000001,1.600519 (0=深市，1=沪市)
@@ -46,7 +51,7 @@ export class EastMoneyServiceSimple {
                     success: false,
                     data: [],
                     errors: ['未找到股票数据'],
-                    source: DataSource.EASTMONEY
+                    source: stock_js_1.DataSource.EASTMONEY
                 };
             }
             const stocks = data.data.diff.map((stock) => {
@@ -69,7 +74,7 @@ export class EastMoneyServiceSimple {
             return {
                 success: stocks.length > 0,
                 data: stocks,
-                source: DataSource.EASTMONEY
+                source: stock_js_1.DataSource.EASTMONEY
             };
         }
         catch (error) {
@@ -77,7 +82,7 @@ export class EastMoneyServiceSimple {
                 success: false,
                 data: [],
                 errors: [error instanceof Error ? error.message : '未知错误'],
-                source: DataSource.EASTMONEY
+                source: stock_js_1.DataSource.EASTMONEY
             };
         }
     }
@@ -109,3 +114,5 @@ export class EastMoneyServiceSimple {
         }
     }
 }
+exports.EastMoneyServiceSimple = EastMoneyServiceSimple;
+//# sourceMappingURL=eastmoney-service-simple.js.map

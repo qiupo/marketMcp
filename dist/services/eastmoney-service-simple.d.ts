@@ -23,3 +23,4 @@ export declare class EastMoneyServiceSimple {
      */
     private getMarketFromCode;
 }
+//# sourceMappingURL=eastmoney-service-simple.d.ts.map

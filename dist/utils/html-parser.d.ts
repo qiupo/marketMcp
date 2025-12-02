@@ -51,3 +51,4 @@ export declare class HtmlParser {
  * 创建HTML解析器实例
  */
 export declare function createHtmlParser(html: string): HtmlParser;
+//# sourceMappingURL=html-parser.d.ts.map

@@ -63,3 +63,4 @@ export declare const TOOL_METHOD_MAP: Record<string, string>;
  * 工具显示名称映射
  */
 export declare const TOOL_DISPLAY_NAMES: Record<string, string>;
+//# sourceMappingURL=toolDefinitions.d.ts.map

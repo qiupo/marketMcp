@@ -1,12 +1,15 @@
+"use strict";
 /**
  * MCP工具定义配置
  * 统一管理所有工具定义，避免重复
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TOOL_DISPLAY_NAMES = exports.TOOL_METHOD_MAP = exports.ALL_TOOLS = exports.IPO3_TOOLS = exports.BASIC_TOOLS = exports.IPO3_TOOL_CONFIG = void 0;
 /**
  * IPO3工具配置映射
  * 统一管理工具参数和描述
  */
-export const IPO3_TOOL_CONFIG = {
+exports.IPO3_TOOL_CONFIG = {
     // 通用参数
     stockCode: {
         type: 'string',
@@ -38,7 +41,7 @@ export const IPO3_TOOL_CONFIG = {
 /**
  * 基础工具定义
  */
-export const BASIC_TOOLS = [
+exports.BASIC_TOOLS = [
     {
         name: 'get_stock_info',
         description: '获取股票详细信息，包括实时行情、公司资料、财务数据等，支持单个或批量查询',
@@ -118,15 +121,15 @@ export const BASIC_TOOLS = [
 /**
  * IPO3增强工具定义
  */
-export const IPO3_TOOLS = [
+exports.IPO3_TOOLS = [
     {
         name: 'get_company_info',
         description: '获取公司详细信息，包括基本资料、股本结构、高管信息、公司简介等',
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code']
         }
@@ -137,10 +140,10 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                statement_type: IPO3_TOOL_CONFIG.statementType,
-                date_type: IPO3_TOOL_CONFIG.dateType,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                statement_type: exports.IPO3_TOOL_CONFIG.statementType,
+                date_type: exports.IPO3_TOOL_CONFIG.dateType,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code', 'statement_type']
         }
@@ -151,8 +154,8 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code']
         }
@@ -163,8 +166,8 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code']
         }
@@ -175,8 +178,8 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code']
         }
@@ -187,8 +190,8 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                page: IPO3_TOOL_CONFIG.page
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                page: exports.IPO3_TOOL_CONFIG.page
             },
             required: ['stock_code']
         }
@@ -199,8 +202,8 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code']
         }
@@ -211,8 +214,8 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code']
         }
@@ -223,8 +226,8 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code']
         }
@@ -235,8 +238,8 @@ export const IPO3_TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                stock_code: IPO3_TOOL_CONFIG.stockCode,
-                english_key: IPO3_TOOL_CONFIG.englishKey
+                stock_code: exports.IPO3_TOOL_CONFIG.stockCode,
+                english_key: exports.IPO3_TOOL_CONFIG.englishKey
             },
             required: ['stock_code']
         }
@@ -245,11 +248,11 @@ export const IPO3_TOOLS = [
 /**
  * 所有工具定义
  */
-export const ALL_TOOLS = [...BASIC_TOOLS, ...IPO3_TOOLS];
+exports.ALL_TOOLS = [...exports.BASIC_TOOLS, ...exports.IPO3_TOOLS];
 /**
  * 工具名称到方法名的映射
  */
-export const TOOL_METHOD_MAP = {
+exports.TOOL_METHOD_MAP = {
     'get_company_info': 'getCompanyInfo',
     'get_financial_statements': 'getFinancialStatements',
     'get_stock_funding': 'getStockFundList',
@@ -264,7 +267,7 @@ export const TOOL_METHOD_MAP = {
 /**
  * 工具显示名称映射
  */
-export const TOOL_DISPLAY_NAMES = {
+exports.TOOL_DISPLAY_NAMES = {
     'get_company_info': '公司详细信息',
     'get_financial_statements': '财务报表',
     'get_stock_funding': '募资明细',
@@ -276,3 +279,4 @@ export const TOOL_DISPLAY_NAMES = {
     'get_stock_pledge': '质押信息',
     'get_stock_reports': '研报列表'
 };
+//# sourceMappingURL=toolDefinitions.js.map
