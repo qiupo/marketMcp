@@ -47,34 +47,17 @@ npm run build
 
 ### 4. 配置 Claude Code
 
-#### 方法 1：自动配置（推荐）
-
-配置文件已自动创建在：
-- `.claude/claude_desktop_config.json`
-
 配置内容：
 ```json
 {
   "mcpServers": {
     "akshare-mcp": {
       "command": "node",
-      "args": ["dist/index.js"],
-      "cwd": "/Users/taoqiupo/Desktop/my-project/marketMcp"
+      "args": ["/path/marketMcp/dist/index.js"],
     }
   }
 }
 ```
-
-#### 方法 2：手动配置
-
-1. 打开 Claude Code
-2. 进入设置：`Cmd + ,` (macOS) 或 `Ctrl + ,` (Windows/Linux)
-3. 找到 MCP 服务器设置
-4. 添加新服务器：
-   - 名称：`akshare-mcp`
-   - 命令：`node`
-   - 参数：`["dist/index.js"]`
-   - 工作目录：`/Users/taoqiupo/Desktop/my-project/marketMcp`
 
 ### 5. 启动服务
 

@@ -1,6 +1,6 @@
 {
   "name": "akshare-mcp-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "基于akshare的金融数据MCP服务器，提供股票、市场行情等金融数据查询功能",
   "main": "dist/index.js",
   "type": "module",
