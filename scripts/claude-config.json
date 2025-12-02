@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "market-mcp": {
-      "command": "node",
-      "args": ["/Users/taoqiupo/Desktop/my-project/marketMcp/dist/index.js"],
-      "description": "金融股票数据查询MCP服务器，提供实时股票行情、搜索和分析功能"
-    }
-  }
-}
